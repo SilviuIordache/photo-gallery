@@ -5,7 +5,7 @@ import type { PhotosWithTotalResults } from 'pexels';
 const Gallery = () => {
   const { data, isLoading, error } = usePhotosQuery({
     query: 'animals',
-    per_page: 5,
+    per_page: 25,
   });
 
   if (isLoading) return <div>Loading...</div>;
