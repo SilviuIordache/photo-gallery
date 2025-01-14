@@ -1,4 +1,4 @@
-import client from './photoClient';
+import client from '../client/photoClient';
 
 export default async function getPhotos(query: string) {
   try {
