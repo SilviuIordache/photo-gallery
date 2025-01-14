@@ -1,31 +1,24 @@
-import { useEffect, useState } from 'react';
-import getPhotos from '../../services/apiMethods/getPhotos';
-import type { PhotosWithTotalResults, ErrorResponse } from 'pexels';
+import usePhotosQuery from '../../queries/usePhotosQuery';
 import GalleryImage from './GalleryImage';
+import type { PhotosWithTotalResults } from 'pexels';
 
 const Gallery = () => {
-  const [photos, setPhotos] = useState<
-    PhotosWithTotalResults | ErrorResponse | null
-  >(null);
+  const { data, isLoading, error } = usePhotosQuery({
+    query: 'animals',
+    per_page: 5,
+  });
 
-  useEffect(() => {
-    const fetchPhotos = async () => {
-      const result = await getPhotos('animals');
+  if (isLoading) return <div>Loading...</div>;
+  if (error) return <div>Error: {error.message}</div>;
+  if (!data || !('photos' in data)) return <div>No photos found</div>;
 
-  
-      setPhotos(result);
-    };
-
-    fetchPhotos();
-  }, []);
-
-  console.log(photos);
-
-  if (!photos) return <div>Loading...</div>;
+  const photos = (data as PhotosWithTotalResults).photos;
   return (
-    <div className="bg-gray-200">
+    <div>
       Gallery
-      <GalleryImage photo={photos?.photos[0]} />
+      {photos.map((photo) => (
+        <GalleryImage key={photo.id} photo={photo} />
+      ))}
     </div>
   );
 };
