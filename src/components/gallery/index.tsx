@@ -13,7 +13,7 @@ const Gallery = () => {
 
   const { data, error, isLoading } = usePhotosQuery({
     query: 'animals',
-    per_page: 5,
+    per_page: 11,
     page: page,
   });
 
