@@ -1,7 +1,7 @@
 import { useState, useEffect } from 'react';
 import usePhotosQuery from '../../queries/usePhotosQuery';
 import GalleryImage from './GalleryImage';
-import type { PhotosWithTotalResults } from 'pexels';
+import type { PhotosWithTotalResults, Photo } from 'pexels';
 
 const Gallery = () => {
   const [page, setPage] = useState(1);
@@ -26,21 +26,37 @@ const Gallery = () => {
   if (error) return <div>Error: {error.message}</div>;
 
   const loadMoreImages = () => {
-    console.log('Load more images button clicked');
     setIsFetchingMore(true);
     setPage((prevPage) => prevPage + 1);
   };
 
+  const generateColumnsContents = (photos: Photo[]) => {
+    const columns = 3;
+    const columnHeights = new Array(columns).fill(0);
+    const columnContents: Photo[][] = Array.from({ length: columns }, () => []);
+
+    // distribute photos to columns based on their height/width ratio
+    photos.forEach((photo) => {
+      const shortestColumnIndex = columnHeights.indexOf(Math.min(...columnHeights));
+      columnContents[shortestColumnIndex].push(photo);
+      columnHeights[shortestColumnIndex] += photo.height / photo.width;
+    });
+
+    return columnContents;
+  };
+
+  const columnContents = generateColumnsContents(allPhotos);
+
   return (
     <div>
       <div className="masonry-grid">
-        {allPhotos.length > 0 ? (
-          allPhotos.map((photo) => (
-            <GalleryImage key={photo.id} photo={photo} />
-          ))
-        ) : (
-          <div>No photos found</div>
-        )}
+        {columnContents.map((column, index) => (
+          <div key={index} className="masonry-column">
+            {column.map((photo) => (
+              <GalleryImage key={photo.id} photo={photo} />
+            ))}
+          </div>
+        ))}
       </div>
 
       {isFetchingMore && <div>Loading more images...</div>}
