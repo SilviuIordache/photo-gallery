@@ -10,7 +10,7 @@ const Gallery = () => {
   );
   const [isFetchingMore, setIsFetchingMore] = useState(false);
 
-  const { data, error } = usePhotosQuery({
+  const { data, error, isLoading } = usePhotosQuery({
     query: 'animals',
     per_page: 5,
     page: page,
@@ -37,7 +37,9 @@ const Gallery = () => {
 
     // distribute photos to columns based on their height/width ratio
     photos.forEach((photo) => {
-      const shortestColumnIndex = columnHeights.indexOf(Math.min(...columnHeights));
+      const shortestColumnIndex = columnHeights.indexOf(
+        Math.min(...columnHeights)
+      );
       columnContents[shortestColumnIndex].push(photo);
       columnHeights[shortestColumnIndex] += photo.height / photo.width;
     });
@@ -51,7 +53,7 @@ const Gallery = () => {
     <div>
       <div className="masonry-grid">
         {columnContents.map((column, index) => (
-          <div key={index} >
+          <div key={index}>
             {column.map((photo) => (
               <GalleryImage key={photo.id} photo={photo} />
             ))}
@@ -59,16 +61,17 @@ const Gallery = () => {
         ))}
       </div>
 
-
-      <div className="flex justify-center">
-        <button
-          className="btn bg-blue-500 text-white hover:bg-blue-600 p-2 rounded-md mt-4 disabled:opacity-50 disabled:cursor-not-allowed disabled:bg-gray-500"
-          onClick={loadMoreImages}
-          disabled={isFetchingMore}
-        >
-          {isFetchingMore ? 'Loading more images...' : 'Load more images'}
-        </button>
-      </div>
+      {!isLoading && (
+        <div className="flex justify-center">
+          <button
+            className="btn bg-blue-500 text-white hover:bg-blue-600 p-2 rounded-md mt-4 disabled:opacity-50 disabled:cursor-not-allowed disabled:bg-gray-500"
+            onClick={loadMoreImages}
+            disabled={isFetchingMore}
+          >
+            {isFetchingMore ? 'Loading more images...' : 'Load more images'}
+          </button>
+        </div>
+      )}
     </div>
   );
 };
