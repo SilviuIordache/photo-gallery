@@ -23,16 +23,20 @@ const Gallery = () => {
     setAllPhotos([]);
   }, []);
 
+  // flag to check if the page has loaded initially
+  useEffect(() => {
+    if (!hasLoadedInitially) {
+      setHasLoadedInitially(true);
+    }
+  }, [hasLoadedInitially]);
+
   // used to update the photos after loading more
   useEffect(() => {
     if (data && 'photos' in data) {
       setAllPhotos((prevPhotos) => [...prevPhotos, ...data.photos]);
       setIsFetchingMore(false);
-      if (!hasLoadedInitially) {
-        setHasLoadedInitially(true);
-      }
     }
-  }, [data, hasLoadedInitially]);
+  }, [data]);
 
   // used to update the number of columns based on the window size
   useEffect(() => {
