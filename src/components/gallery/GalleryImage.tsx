@@ -13,7 +13,7 @@ const GalleryImage = ({ photo }: GalleryImageProps) => {
   };
   return (
     <div onClick={handleClick}>
-      <img src={photo.src.small} alt={photo.alt || ''} />
+      <img src={photo.src.small} alt={photo.alt || ''} className="w-full" />
     </div>
   );
 };
