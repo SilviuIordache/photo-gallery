@@ -12,8 +12,12 @@ const GalleryImage = ({ photo }: GalleryImageProps) => {
     navigate(`/${photo.id}`);
   };
   return (
-    <div onClick={handleClick}>
-      <img src={photo.src.small} alt={photo.alt || ''} className="w-full" />
+    <div onClick={handleClick} className="mb-4">
+      <img
+        src={photo.src.large}
+        alt={photo.alt || ''}
+        className="w-full rounded-lg hover:opacity-80 hover:cursor-pointer transform transition-transform duration-200 hover:scale-105"
+      />
     </div>
   );
 };

@@ -51,7 +51,7 @@ const Gallery = () => {
     <div>
       <div className="masonry-grid">
         {columnContents.map((column, index) => (
-          <div key={index} className="masonry-column">
+          <div key={index} >
             {column.map((photo) => (
               <GalleryImage key={photo.id} photo={photo} />
             ))}
