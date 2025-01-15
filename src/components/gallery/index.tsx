@@ -1,7 +1,8 @@
-import { useState, useEffect } from 'react';
+import { useState, useEffect, useCallback } from 'react';
 import usePhotosQuery from '../../queries/usePhotosQuery';
 import GalleryImage from './GalleryImage';
 import type { PhotosWithTotalResults, Photo } from 'pexels';
+import LoadMoreTrigger from '../loadTrigger/LoadMoreTrigger';
 
 const Gallery = () => {
   const [page, setPage] = useState(1);
@@ -11,12 +12,27 @@ const Gallery = () => {
   const [isFetchingMore, setIsFetchingMore] = useState(false);
   const [columns, setColumns] = useState(3);
   const [hasLoadedInitially, setHasLoadedInitially] = useState(false);
+  const [loadCountdown, setLoadCountdown] = useState<number | null>(null);
 
   const { data, error } = usePhotosQuery({
     query: 'animals',
     per_page: 9,
     page: page,
   });
+
+  const loadMoreImages = useCallback(() => {
+    if (loadCountdown !== null) return;
+
+    setIsFetchingMore(true);
+    setPage((prevPage) => prevPage + 1);
+    setLoadCountdown(3);
+
+    const timer = setTimeout(() => {
+      setLoadCountdown(null);
+    }, 3000);
+
+    return () => clearTimeout(timer);
+  }, [loadCountdown]);
 
   // used to clear the photos when the page is loaded
   useEffect(() => {
@@ -60,12 +76,24 @@ const Gallery = () => {
     return () => window.removeEventListener('resize', updateColumns);
   }, []);
 
-  if (error) return <div>Error: {error.message}</div>;
+  useEffect(() => {
+    if (loadCountdown === null) return;
 
-  const loadMoreImages = () => {
-    setIsFetchingMore(true);
-    setPage((prevPage) => prevPage + 1);
-  };
+    const interval = setInterval(() => {
+      setLoadCountdown((prevCountdown) => {
+        if (prevCountdown === 1) {
+          clearInterval(interval);
+          return null;
+        }
+        return prevCountdown! - 1;
+      });
+    }, 1000);
+
+    // Cleanup interval on component unmount
+    return () => clearInterval(interval);
+  }, [loadCountdown]);
+
+  if (error) return <div>Error: {error.message}</div>;
 
   const generateColumnsContents = (photos: Photo[]) => {
     const columnHeights = new Array(columns).fill(0);
@@ -87,7 +115,7 @@ const Gallery = () => {
 
   return (
     <div>
-      <h1 className="text-4xl font-bold mb-4 text-left mb-10">Photo gallery</h1>
+      <h1 className="text-4xl font-bold text-left mb-10">Photo gallery</h1>
       <div className="masonry-grid" style={{ columnCount: columns }}>
         {columnContents.map((column, index) => (
           <div key={index}>
@@ -98,7 +126,13 @@ const Gallery = () => {
         ))}
       </div>
 
-      {hasLoadedInitially && (
+      <LoadMoreTrigger
+        onInView={loadMoreImages}
+        isFetchingMore={isFetchingMore}
+        loadCountdown={loadCountdown}
+      />
+
+      {/* {hasLoadedInitially && (
         <div className="flex justify-center">
           <button
             className="btn bg-blue-500 text-white hover:bg-blue-600 p-2 rounded-md mt-4 disabled:opacity-50 disabled:cursor-not-allowed disabled:bg-gray-500"
@@ -108,7 +142,7 @@ const Gallery = () => {
             {isFetchingMore ? 'Loading more images...' : 'Load more images'}
           </button>
         </div>
-      )}
+      )} */}
     </div>
   );
 };
