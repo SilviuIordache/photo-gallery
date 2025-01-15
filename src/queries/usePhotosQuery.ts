@@ -5,12 +5,13 @@ import { PhotosWithTotalResults, ErrorResponse } from 'pexels';
 interface Props {
   query: string;
   per_page?: number;
+  page?: number;
 }
 
 const usePhotosQuery = (props: Props) => {
   return useQuery<PhotosWithTotalResults | ErrorResponse>({
-    queryKey: ['photos', props.query],
-    queryFn: () => fetchPhotos(props.query, props.per_page),
+    queryKey: ['photos', props.query, props.page],
+    queryFn: () => fetchPhotos(props.query, props.per_page, props.page),
     staleTime: 1000 * 60 * 8,
   });
 };
