@@ -87,6 +87,7 @@ const Gallery = () => {
 
   return (
     <div>
+      <h1 className="text-4xl font-bold mb-4 text-left mb-10">Photo gallery</h1>
       <div className="masonry-grid" style={{ columnCount: columns }}>
         {columnContents.map((column, index) => (
           <div key={index}>
