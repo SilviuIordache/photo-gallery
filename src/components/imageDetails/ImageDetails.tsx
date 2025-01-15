@@ -20,7 +20,7 @@ const ImageDetails = (props: Props) => {
     <div>
       <div className="flex justify-between items-start">
         <button
-          className="text-blue-500 hover:underline"
+          className="bg-blue-500 text-white px-4 py-2 rounded-md fixed top-0 left-0 m-4"
           onClick={() => navigate('/')}
         >
           Go Back
@@ -36,13 +36,7 @@ const ImageDetails = (props: Props) => {
 
         <div className="text-start">
           <p className="text-sm text-gray-500">
-            Author:{' '}
-            <a
-              href={photo.photographer_url}
-              className="text-blue-500 hover:underline"
-            >
-              {photo.photographer}
-            </a>
+            Author: <a href={photo.photographer_url}>{photo.photographer}</a>
           </p>
 
           <div>

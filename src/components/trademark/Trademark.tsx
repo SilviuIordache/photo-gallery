@@ -1,8 +1,10 @@
-
 const Trademark = () => {
   return (
     <div>
-      <a href="https://www.pexels.com" className="fixed bottom-0 right-0 m-4">
+      <a
+        className="text-sm fixed bottom-0 right-0 m-4"
+        href="https://www.pexels.com"
+      >
         Photos provided by Pexels
       </a>
     </div>
