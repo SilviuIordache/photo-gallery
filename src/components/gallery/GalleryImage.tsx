@@ -1,6 +1,6 @@
 import { Photo } from 'pexels';
 import { useNavigate } from 'react-router-dom';
-// import { useState, useEffect } from 'react';
+import { useState, useEffect } from 'react';
 
 interface GalleryImageProps {
   photo: Photo;
@@ -8,19 +8,18 @@ interface GalleryImageProps {
 
 const GalleryImage = ({ photo }: GalleryImageProps) => {
   const navigate = useNavigate();
-  // const [loadHigherQuality, setLoadHigherQuality] = useState(false);
+  const [loadHigherQuality, setLoadHigherQuality] = useState(false);
 
-  // // after a few seconds, load higher quality image
-  // useEffect(() => {
-  //   const timer = setTimeout(() => {
-  //     setLoadHigherQuality(true);
-  //   }, 3000);
+  // after a few seconds, load higher quality image
+  useEffect(() => {
+    const timer = setTimeout(() => {
+      setLoadHigherQuality(true);
+    }, 3000);
 
-  //   return () => clearTimeout(timer); // Cleanup the timer on component unmount
-  // }, []);
+    return () => clearTimeout(timer); // Cleanup the timer on component unmount
+  }, []);
 
-  // const imageSrc = loadHigherQuality ? photo.src.large : photo.src.small;
-  const imageSrc = photo.src.small;
+  const imageSrc = loadHigherQuality ? photo.src.large : photo.src.small;
 
   const handleClick = () => {
     navigate(`/${photo.id}`);
