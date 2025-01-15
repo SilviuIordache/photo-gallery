@@ -1,12 +1,10 @@
 import client from '../client/photoClient';
 
-export default async function getPhotos(
-  query: string,
-  per_page?: number,
-  page?: number
+export default async function getPhotoById(
+  id: string  
 ) {
   try {
-    const result = await client.photos.search({ query, per_page, page });
+    const result = await client.photos.show({ id });
     return result;
   } catch (error) {   
     console.error('Error fetching photos:', error);
