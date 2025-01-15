@@ -15,7 +15,7 @@ const GalleryImage = ({ photo }: GalleryImageProps) => {
   return (
     <div onClick={handleClick} className="mb-4">
       <img
-        src={photo.src.small}
+        src={photo.src.medium}
         alt={photo.alt || ''}
         className="w-full rounded-lg hover:opacity-80 hover:cursor-pointer transform transition-transform duration-200 hover:scale-105"
         width={photo.width}
