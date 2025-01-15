@@ -14,7 +14,7 @@ const GalleryImage = ({ photo }: GalleryImageProps) => {
   useEffect(() => {
     const timer = setTimeout(() => {
       setLoadHigherQuality(true);
-    }, 3000);
+    }, 2000);
 
     return () => clearTimeout(timer); // Cleanup the timer on component unmount
   }, []);
@@ -26,7 +26,13 @@ const GalleryImage = ({ photo }: GalleryImageProps) => {
   };
 
   return (
-    <div onClick={handleClick} className="mb-4">
+    <div
+      onClick={handleClick}
+      onMouseEnter={() => {
+        setLoadHigherQuality(true);
+      }}
+      className="mb-4"
+    >
       <img
         src={imageSrc}
         alt={photo.alt || ''}
