@@ -14,8 +14,7 @@ const Gallery = () => {
 
   const photos = (data as PhotosWithTotalResults).photos;
   return (
-    <div>
-      Gallery
+    <div className="masonry-grid">
       {photos.map((photo) => (
         <GalleryImage key={photo.id} photo={photo} />
       ))}
