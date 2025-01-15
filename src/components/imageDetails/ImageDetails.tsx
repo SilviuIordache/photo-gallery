@@ -36,7 +36,7 @@ const ImageDetails = (props: Props) => {
 
         <div className="text-start">
           <p className="text-sm text-gray-500">
-            Author: <a href={photo.photographer_url}>{photo.photographer}</a>
+            Author: <a href={photo.url}>{photo.photographer}</a>
           </p>
 
           <div>
