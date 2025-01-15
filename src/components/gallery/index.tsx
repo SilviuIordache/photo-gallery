@@ -17,6 +17,11 @@ const Gallery = () => {
     page: page,
   });
 
+  // used to clear the photos when the page is loaded
+  useEffect(() => {
+    setAllPhotos([]);
+  }, []);
+
   // used to update the photos after loading more
   useEffect(() => {
     if (data && 'photos' in data) {
@@ -24,7 +29,6 @@ const Gallery = () => {
       setIsFetchingMore(false);
     }
   }, [data]);
-
 
   // used to update the number of columns based on the window size
   useEffect(() => {
