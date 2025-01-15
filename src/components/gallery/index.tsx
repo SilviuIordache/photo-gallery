@@ -9,6 +9,7 @@ const Gallery = () => {
     []
   );
   const [isFetchingMore, setIsFetchingMore] = useState(false);
+  const [columns, setColumns] = useState(3);
 
   const { data, error, isLoading } = usePhotosQuery({
     query: 'animals',
@@ -16,12 +17,36 @@ const Gallery = () => {
     page: page,
   });
 
+  // used to update the photos after loading more
   useEffect(() => {
     if (data && 'photos' in data) {
       setAllPhotos((prevPhotos) => [...prevPhotos, ...data.photos]);
       setIsFetchingMore(false);
     }
   }, [data]);
+
+
+  // used to update the number of columns based on the window size
+  useEffect(() => {
+    const updateColumns = () => {
+      if (window.innerWidth < 600) {
+        setColumns(1); // Small devices
+      } else if (window.innerWidth < 1024) {
+        setColumns(2); // Medium devices
+      } else {
+        setColumns(3); // Large devices
+      }
+    };
+
+    // Set initial columns
+    updateColumns();
+
+    // Add event listener for window resize
+    window.addEventListener('resize', updateColumns);
+
+    // Cleanup event listener on component unmount
+    return () => window.removeEventListener('resize', updateColumns);
+  }, []);
 
   if (error) return <div>Error: {error.message}</div>;
 
@@ -31,7 +56,6 @@ const Gallery = () => {
   };
 
   const generateColumnsContents = (photos: Photo[]) => {
-    const columns = 3;
     const columnHeights = new Array(columns).fill(0);
     const columnContents: Photo[][] = Array.from({ length: columns }, () => []);
 
@@ -51,7 +75,7 @@ const Gallery = () => {
 
   return (
     <div>
-      <div className="masonry-grid">
+      <div className="masonry-grid" style={{ columnCount: columns }}>
         {columnContents.map((column, index) => (
           <div key={index}>
             {column.map((photo) => (
