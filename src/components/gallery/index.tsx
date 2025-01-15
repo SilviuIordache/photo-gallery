@@ -59,15 +59,14 @@ const Gallery = () => {
         ))}
       </div>
 
-      {isFetchingMore && <div>Loading more images...</div>}
 
       <div className="flex justify-center">
         <button
-          className="btn bg-blue-500 text-white hover:bg-blue-600 p-2 rounded-md mt-4"
+          className="btn bg-blue-500 text-white hover:bg-blue-600 p-2 rounded-md mt-4 disabled:opacity-50 disabled:cursor-not-allowed disabled:bg-gray-500"
           onClick={loadMoreImages}
           disabled={isFetchingMore}
         >
-          Load more images
+          {isFetchingMore ? 'Loading more images...' : 'Load more images'}
         </button>
       </div>
     </div>
