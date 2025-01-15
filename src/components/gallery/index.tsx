@@ -10,8 +10,9 @@ const Gallery = () => {
   );
   const [isFetchingMore, setIsFetchingMore] = useState(false);
   const [columns, setColumns] = useState(3);
+  const [hasLoadedInitially, setHasLoadedInitially] = useState(false);
 
-  const { data, error, isLoading } = usePhotosQuery({
+  const { data, error } = usePhotosQuery({
     query: 'animals',
     per_page: 9,
     page: page,
@@ -27,8 +28,11 @@ const Gallery = () => {
     if (data && 'photos' in data) {
       setAllPhotos((prevPhotos) => [...prevPhotos, ...data.photos]);
       setIsFetchingMore(false);
+      if (!hasLoadedInitially) {
+        setHasLoadedInitially(true);
+      }
     }
-  }, [data]);
+  }, [data, hasLoadedInitially]);
 
   // used to update the number of columns based on the window size
   useEffect(() => {
@@ -89,7 +93,7 @@ const Gallery = () => {
         ))}
       </div>
 
-      {!isLoading && (
+      {hasLoadedInitially && (
         <div className="flex justify-center">
           <button
             className="btn bg-blue-500 text-white hover:bg-blue-600 p-2 rounded-md mt-4 disabled:opacity-50 disabled:cursor-not-allowed disabled:bg-gray-500"
