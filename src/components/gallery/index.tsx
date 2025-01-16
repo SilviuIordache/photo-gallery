@@ -89,6 +89,7 @@ const Gallery = () => {
     [setSearchParams]
   );
 
+  // used to handle the initial query
   useEffect(() => {
     if (initialQuery) {
       handleSearch(initialQuery);
