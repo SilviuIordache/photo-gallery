@@ -1,6 +1,6 @@
 import { Photo } from 'pexels';
 import { useNavigate } from 'react-router-dom';
-import { useState, useEffect } from 'react';
+// import { useState, useEffect } from 'react';
 
 interface GalleryImageProps {
   photo: Photo;
