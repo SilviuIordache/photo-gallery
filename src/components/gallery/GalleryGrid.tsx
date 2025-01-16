@@ -13,9 +13,7 @@ const GalleryGrid = ({ photos }: GalleryGridProps) => {
   useEffect(() => {
     const updateColumns = () => {
       if (window.innerWidth < 600) {
-        setColumns(1); // Small devices
-      } else if (window.innerWidth < 1024) {
-        setColumns(2); // Medium devices
+        setColumns(2); // Small devices
       } else {
         setColumns(3); // Large devices
       }
