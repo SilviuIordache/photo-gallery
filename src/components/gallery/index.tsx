@@ -6,6 +6,7 @@ import SearchInput from './SearchInput';
 import GalleryGrid from './GalleryGrid';
 
 const Gallery = () => {
+  
   const [page, setPage] = useState(1);
   const [allPhotos, setAllPhotos] = useState<PhotosWithTotalResults['photos']>(
     []
@@ -13,9 +14,10 @@ const Gallery = () => {
   const [isFetchingMore, setIsFetchingMore] = useState(false);
   const [hasLoadedInitially, setHasLoadedInitially] = useState(false);
   const [loadCountdown, setLoadCountdown] = useState<number | null>(null);
+  const [query, setQuery] = useState('animals');
 
   const { data, error } = usePhotosQuery({
-    query: 'animals',
+    query: query,
     per_page: 9,
     page: page,
   });
@@ -34,10 +36,10 @@ const Gallery = () => {
     return () => clearTimeout(timer);
   }, [loadCountdown]);
 
-  // used to clear the photos when the page is loaded
+  // used to clear the photos when the query changes
   useEffect(() => {
     setAllPhotos([]);
-  }, []);
+  }, [query]);
 
   // flag to check if the page has loaded initially
   useEffect(() => {
@@ -74,7 +76,8 @@ const Gallery = () => {
   if (error) return <div>Error: {error.message}</div>;
 
   const handleSearch = (query: string) => {
-    console.log(query);
+    setQuery(query);
+    setPage(1);
   };
 
   return (
