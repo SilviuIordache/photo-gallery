@@ -79,7 +79,12 @@ const Gallery = () => {
     (query: string) => {
       setQuery(query);
       setPage(1);
-      setSearchParams({ query });
+
+      if (query) {
+        setSearchParams({ query });
+      } else {
+        setSearchParams({});
+      }
     },
     [setSearchParams]
   );
