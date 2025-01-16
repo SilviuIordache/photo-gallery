@@ -13,7 +13,7 @@ const Gallery = () => {
   const [isFetchingMore, setIsFetchingMore] = useState(false);
   const [hasLoadedInitially, setHasLoadedInitially] = useState(false);
   const [loadCountdown, setLoadCountdown] = useState<number | null>(null);
-  const [query, setQuery] = useState('animals');
+  const [query, setQuery] = useState('');
 
   const { data, error } = usePhotosQuery({
     query: query,

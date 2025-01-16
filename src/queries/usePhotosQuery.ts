@@ -1,6 +1,6 @@
 import { useQuery } from '@tanstack/react-query';
 import getPhotos from '../services/apiMethods/getPhotos';
-import { PhotosWithTotalResults, ErrorResponse } from 'pexels';
+import { Photos, ErrorResponse } from 'pexels';
 
 interface Props {
   query: string;
@@ -9,7 +9,7 @@ interface Props {
 }
 
 const usePhotosQuery = (props: Props) => {
-  return useQuery<PhotosWithTotalResults | ErrorResponse>({
+  return useQuery<Photos | ErrorResponse>({
     queryKey: ['photos', props.query, props.page],
     queryFn: () => getPhotos(props.query, props.per_page, props.page),
     staleTime: 1000 * 60 * 8,

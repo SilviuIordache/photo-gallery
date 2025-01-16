@@ -6,9 +6,16 @@ export default async function getPhotos(
   page?: number
 ) {
   try {
-    const result = await client.photos.search({ query, per_page, page });
+    let result;
+
+    if (query) {
+      result = await client.photos.search({ query, per_page, page });
+    } else {
+      result = await client.photos.curated({ per_page, page });
+    }
+
     return result;
-  } catch (error) {   
+  } catch (error) {
     console.error('Error fetching photos:', error);
     throw error;
   }
