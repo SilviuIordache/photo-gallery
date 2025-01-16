@@ -3,6 +3,7 @@ import usePhotosQuery from '../../queries/usePhotosQuery';
 import GalleryImage from './GalleryImage';
 import type { PhotosWithTotalResults, Photo } from 'pexels';
 import LoadMoreTrigger from './LoadMoreTrigger';
+import SearchInput from './SearchInput';
 
 const Gallery = () => {
   const [page, setPage] = useState(1);
@@ -113,9 +114,18 @@ const Gallery = () => {
 
   const columnContents = generateColumnsContents(allPhotos);
 
+  const handleSearch = (query: string) => {
+    console.log(query);
+  };
+
   return (
     <div>
       <h1 className="text-4xl font-bold text-left mb-10">Photo gallery</h1>
+
+      <div className='flex flex-start mb-10'>
+        <SearchInput onSearch={handleSearch}/>
+      </div>
+
       <div className="masonry-grid" style={{ columnCount: columns }}>
         {columnContents.map((column, index) => (
           <div key={index}>
