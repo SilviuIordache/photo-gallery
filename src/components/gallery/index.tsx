@@ -18,7 +18,11 @@ const Gallery = () => {
   const [hasLoadedInitially, setHasLoadedInitially] = useState(false);
   const [loadCountdown, setLoadCountdown] = useState<number | null>(null);
 
-  const { data, error } = usePhotosQuery({
+  const {
+    data: photosResponse,
+    error,
+    isLoading: isLoadingPhotos,
+  } = usePhotosQuery({
     query: query,
     per_page: 11,
     page: page,
@@ -52,11 +56,11 @@ const Gallery = () => {
 
   // used to update the photos after loading more
   useEffect(() => {
-    if (data && 'photos' in data) {
-      setAllPhotos((prevPhotos) => [...prevPhotos, ...data.photos]);
+    if (photosResponse && 'photos' in photosResponse) {
+      setAllPhotos((prevPhotos) => [...prevPhotos, ...photosResponse.photos]);
       setIsFetchingMore(false);
     }
-  }, [data]);
+  }, [photosResponse]);
 
   // used to update the loadCountdown state
   useEffect(() => {
@@ -116,7 +120,11 @@ const Gallery = () => {
         )}
 
         <div className="mt-15">
-          <GalleryGrid photos={allPhotos} />
+          {isLoadingPhotos ? (
+            <div>Loading container</div>
+          ) : (
+            <GalleryGrid photos={allPhotos} />
+          )}
         </div>
 
         <LoadMoreTrigger
