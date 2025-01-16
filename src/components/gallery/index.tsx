@@ -1,9 +1,9 @@
 import { useState, useEffect, useCallback } from 'react';
 import usePhotosQuery from '../../queries/usePhotosQuery';
-import GalleryImage from './GalleryImage';
-import type { PhotosWithTotalResults, Photo } from 'pexels';
+import type { PhotosWithTotalResults } from 'pexels';
 import LoadMoreTrigger from './LoadMoreTrigger';
 import SearchInput from './SearchInput';
+import GalleryGrid from './GalleryGrid';
 
 const Gallery = () => {
   const [page, setPage] = useState(1);
@@ -11,7 +11,6 @@ const Gallery = () => {
     []
   );
   const [isFetchingMore, setIsFetchingMore] = useState(false);
-  const [columns, setColumns] = useState(3);
   const [hasLoadedInitially, setHasLoadedInitially] = useState(false);
   const [loadCountdown, setLoadCountdown] = useState<number | null>(null);
 
@@ -55,28 +54,6 @@ const Gallery = () => {
     }
   }, [data]);
 
-  // used to update the number of columns based on the window size
-  useEffect(() => {
-    const updateColumns = () => {
-      if (window.innerWidth < 600) {
-        setColumns(1); // Small devices
-      } else if (window.innerWidth < 1024) {
-        setColumns(2); // Medium devices
-      } else {
-        setColumns(3); // Large devices
-      }
-    };
-
-    // Set initial columns
-    updateColumns();
-
-    // Add event listener for window resize
-    window.addEventListener('resize', updateColumns);
-
-    // Cleanup event listener on component unmount
-    return () => window.removeEventListener('resize', updateColumns);
-  }, []);
-
   useEffect(() => {
     if (loadCountdown === null) return;
 
@@ -96,24 +73,6 @@ const Gallery = () => {
 
   if (error) return <div>Error: {error.message}</div>;
 
-  const generateColumnsContents = (photos: Photo[]) => {
-    const columnHeights = new Array(columns).fill(0);
-    const columnContents: Photo[][] = Array.from({ length: columns }, () => []);
-
-    // distribute photos to columns based on their height/width ratio
-    photos.forEach((photo) => {
-      const shortestColumnIndex = columnHeights.indexOf(
-        Math.min(...columnHeights)
-      );
-      columnContents[shortestColumnIndex].push(photo);
-      columnHeights[shortestColumnIndex] += photo.height / photo.width;
-    });
-
-    return columnContents;
-  };
-
-  const columnContents = generateColumnsContents(allPhotos);
-
   const handleSearch = (query: string) => {
     console.log(query);
   };
@@ -122,19 +81,11 @@ const Gallery = () => {
     <div>
       <h1 className="text-4xl font-bold text-left mb-10">Photo gallery</h1>
 
-      <div className='flex flex-start mb-10'>
-        <SearchInput onSearch={handleSearch}/>
+      <div className="flex flex-start mb-10">
+        <SearchInput onSearch={handleSearch} />
       </div>
 
-      <div className="masonry-grid" style={{ columnCount: columns }}>
-        {columnContents.map((column, index) => (
-          <div key={index}>
-            {column.map((photo) => (
-              <GalleryImage key={photo.id} photo={photo} />
-            ))}
-          </div>
-        ))}
-      </div>
+      <GalleryGrid photos={allPhotos} />
 
       <LoadMoreTrigger
         onInView={loadMoreImages}
