@@ -13,6 +13,7 @@ const usePhotosQuery = (props: Props) => {
     queryKey: ['photos', props.query, props.page],
     queryFn: () => getPhotos(props.query, props.per_page, props.page),
     staleTime: 1000 * 60 * 8,
+    gcTime: 1000 * 60 * 30,
   });
 };
 
