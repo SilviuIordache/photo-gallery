@@ -5,6 +5,7 @@ import LoadMoreTrigger from './LoadMoreTrigger';
 import SearchInput from './SearchInput';
 import GalleryGrid from './GalleryGrid';
 import { useSearchParams } from 'react-router-dom';
+import SkeletonGrid from './SkeletonGrid';
 
 const Gallery = () => {
   const [searchParams, setSearchParams] = useSearchParams();
@@ -121,17 +122,19 @@ const Gallery = () => {
 
         <div className="mt-15">
           {isLoadingPhotos ? (
-            <div>Loading container</div>
+            <SkeletonGrid />
           ) : (
             <GalleryGrid photos={allPhotos} />
           )}
         </div>
 
-        <LoadMoreTrigger
-          onInView={loadMoreImages}
-          isFetchingMore={isFetchingMore}
-          loadCountdown={loadCountdown}
-        />
+        {allPhotos.length > 0 && (
+          <LoadMoreTrigger
+            onInView={loadMoreImages}
+            isFetchingMore={isFetchingMore}
+            loadCountdown={loadCountdown}
+          />
+        )}
       </div>
     </div>
   );
