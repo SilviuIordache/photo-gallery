@@ -19,7 +19,7 @@ const GalleryImage = ({ photo }: GalleryImageProps) => {
   //   return () => clearTimeout(timer); // Cleanup the timer on component unmount
   // }, []);
 
-  const imageSrc = photo.src.large;
+  const imageSrc = photo.src.medium;
 
   const handleClick = () => {
     navigate(`/${photo.id}`);
