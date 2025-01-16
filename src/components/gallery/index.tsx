@@ -4,8 +4,12 @@ import type { PhotosWithTotalResults } from 'pexels';
 import LoadMoreTrigger from './LoadMoreTrigger';
 import SearchInput from './SearchInput';
 import GalleryGrid from './GalleryGrid';
+import { useSearchParams } from 'react-router-dom';
 
 const Gallery = () => {
+  const [searchParams, setSearchParams] = useSearchParams();
+  const initialQuery = searchParams.get('query') || '';
+  const [query, setQuery] = useState(initialQuery);
   const [page, setPage] = useState(1);
   const [allPhotos, setAllPhotos] = useState<PhotosWithTotalResults['photos']>(
     []
@@ -13,7 +17,6 @@ const Gallery = () => {
   const [isFetchingMore, setIsFetchingMore] = useState(false);
   const [hasLoadedInitially, setHasLoadedInitially] = useState(false);
   const [loadCountdown, setLoadCountdown] = useState<number | null>(null);
-  const [query, setQuery] = useState('');
 
   const { data, error } = usePhotosQuery({
     query: query,
@@ -40,7 +43,7 @@ const Gallery = () => {
     setAllPhotos([]);
   }, [query]);
 
-  // flag to check if the page has loaded initially
+  // used to set the hasLoadedInitially state to true
   useEffect(() => {
     if (!hasLoadedInitially) {
       setHasLoadedInitially(true);
@@ -55,6 +58,7 @@ const Gallery = () => {
     }
   }, [data]);
 
+  // used to update the loadCountdown state
   useEffect(() => {
     if (loadCountdown === null) return;
 
@@ -68,16 +72,25 @@ const Gallery = () => {
       });
     }, 1000);
 
-    // Cleanup interval on component unmount
     return () => clearInterval(interval);
   }, [loadCountdown]);
 
-  if (error) return <div>Error: {error.message}</div>;
+  const handleSearch = useCallback(
+    (query: string) => {
+      setQuery(query);
+      setPage(1);
+      setSearchParams({ query });
+    },
+    [setSearchParams]
+  );
 
-  const handleSearch = (query: string) => {
-    setQuery(query);
-    setPage(1);
-  };
+  useEffect(() => {
+    if (initialQuery) {
+      handleSearch(initialQuery);
+    }
+  }, [handleSearch, initialQuery]);
+
+  if (error) return <div>Error: {error.message}</div>;
 
   return (
     <div className="grid grid-cols-1">
@@ -98,18 +111,6 @@ const Gallery = () => {
           loadCountdown={loadCountdown}
         />
       </div>
-
-      {/* {hasLoadedInitially && (
-        <div className="flex justify-center">
-          <button
-            className="btn bg-blue-500 text-white hover:bg-blue-600 p-2 rounded-md mt-4 disabled:opacity-50 disabled:cursor-not-allowed disabled:bg-gray-500"
-            onClick={loadMoreImages}
-            disabled={isFetchingMore}
-          >
-            {isFetchingMore ? 'Loading more images...' : 'Load more images'}
-          </button>
-        </div>
-      )} */}
     </div>
   );
 };
