@@ -2,7 +2,7 @@ import { useState, useEffect, useCallback } from 'react';
 import usePhotosQuery from '../../queries/usePhotosQuery';
 import GalleryImage from './GalleryImage';
 import type { PhotosWithTotalResults, Photo } from 'pexels';
-import LoadMoreTrigger from '../loadTrigger/LoadMoreTrigger';
+import LoadMoreTrigger from './LoadMoreTrigger';
 
 const Gallery = () => {
   const [page, setPage] = useState(1);
