@@ -100,14 +100,19 @@ const Gallery = () => {
   return (
     <div className="grid grid-cols-1">
       <div>
-        <h1 className="text-4xl font-bold text-left mb-10">Photo gallery</h1>
+        <h1 className="text-4xl font-bold mb-10">Photo gallery</h1>
 
-        <div className="flex flex-start mb-10">
+        <div className="flex justify-center mb-10">
           <SearchInput onSearch={handleSearch} />
         </div>
       </div>
 
-      <div>
+      <div className="relative min-h-[540px]">
+        {!allPhotos.length && !isFetchingMore && (
+          <div className="absolute inset-0 flex items-center justify-center text-lg text-gray-500">
+            Loading images...
+          </div>
+        )}
         <GalleryGrid photos={allPhotos} />
 
         <LoadMoreTrigger
