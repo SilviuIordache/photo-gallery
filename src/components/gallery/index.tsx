@@ -6,7 +6,6 @@ import SearchInput from './SearchInput';
 import GalleryGrid from './GalleryGrid';
 
 const Gallery = () => {
-  
   const [page, setPage] = useState(1);
   const [allPhotos, setAllPhotos] = useState<PhotosWithTotalResults['photos']>(
     []
@@ -81,20 +80,24 @@ const Gallery = () => {
   };
 
   return (
-    <div>
-      <h1 className="text-4xl font-bold text-left mb-10">Photo gallery</h1>
+    <div className="grid grid-cols-1">
+      <div>
+        <h1 className="text-4xl font-bold text-left mb-10">Photo gallery</h1>
 
-      <div className="flex flex-start mb-10">
-        <SearchInput onSearch={handleSearch} />
+        <div className="flex flex-start mb-10">
+          <SearchInput onSearch={handleSearch} />
+        </div>
       </div>
 
-      <GalleryGrid photos={allPhotos} />
+      <div>
+        <GalleryGrid photos={allPhotos} />
 
-      <LoadMoreTrigger
-        onInView={loadMoreImages}
-        isFetchingMore={isFetchingMore}
-        loadCountdown={loadCountdown}
-      />
+        <LoadMoreTrigger
+          onInView={loadMoreImages}
+          isFetchingMore={isFetchingMore}
+          loadCountdown={loadCountdown}
+        />
+      </div>
 
       {/* {hasLoadedInitially && (
         <div className="flex justify-center">
