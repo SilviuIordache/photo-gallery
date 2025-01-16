@@ -20,7 +20,7 @@ const Gallery = () => {
 
   const { data, error } = usePhotosQuery({
     query: query,
-    per_page: 9,
+    per_page: 11,
     page: page,
   });
 
