@@ -1,5 +1,4 @@
-// src/components/gallery/LoadMoreTrigger.tsx
-import React from 'react';
+import React, { useEffect } from 'react';
 import { useInView } from 'react-intersection-observer';
 
 interface LoadMoreTriggerProps {
@@ -15,7 +14,7 @@ const LoadMoreTrigger: React.FC<LoadMoreTriggerProps> = ({
 }) => {
   const { ref, inView } = useInView();
 
-  React.useEffect(() => {
+  useEffect(() => {
     if (inView) {
       onInView();
     }
