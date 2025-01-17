@@ -17,7 +17,7 @@ const Gallery = () => {
   );
   const [isFetchingMore, setIsFetchingMore] = useState(false);
   const [hasLoadedInitially, setHasLoadedInitially] = useState(false);
-  const [loadCountdown, setLoadCountdown] = useState<number | null>(null);
+  const [loadCountdown, setLoadCountdown] = useState<number | null>(3);
 
   const {
     data: photosResponse,
@@ -31,16 +31,10 @@ const Gallery = () => {
 
   const loadMoreImages = useCallback(() => {
     if (loadCountdown !== null) return;
-
+  
     setIsFetchingMore(true);
     setPage((prevPage) => prevPage + 1);
     setLoadCountdown(3);
-
-    const timer = setTimeout(() => {
-      setLoadCountdown(null);
-    }, 3000);
-
-    return () => clearTimeout(timer);
   }, [loadCountdown]);
 
   // used to clear the photos when the query changes
@@ -121,7 +115,7 @@ const Gallery = () => {
         )}
 
         <div className="mt-15">
-          {isLoadingPhotos ? (
+          {(isLoadingPhotos && !allPhotos.length) ? (
             <SkeletonGrid />
           ) : (
             <GalleryGrid photos={allPhotos} />
