@@ -16,7 +16,6 @@ const Gallery = () => {
     []
   );
   const [isFetchingMore, setIsFetchingMore] = useState(false);
-  const [hasLoadedInitially, setHasLoadedInitially] = useState(false);
   const [loadCountdown, setLoadCountdown] = useState<number | null>(3);
 
   const {
@@ -31,7 +30,7 @@ const Gallery = () => {
 
   const loadMoreImages = useCallback(() => {
     if (loadCountdown !== null) return;
-  
+
     setIsFetchingMore(true);
     setPage((prevPage) => prevPage + 1);
     setLoadCountdown(3);
@@ -41,13 +40,6 @@ const Gallery = () => {
   useEffect(() => {
     setAllPhotos([]);
   }, [query]);
-
-  // used to set the hasLoadedInitially state to true
-  useEffect(() => {
-    if (!hasLoadedInitially) {
-      setHasLoadedInitially(true);
-    }
-  }, [hasLoadedInitially]);
 
   // used to update the photos after loading more
   useEffect(() => {
@@ -115,7 +107,7 @@ const Gallery = () => {
         )}
 
         <div className="mt-15">
-          {(isLoadingPhotos && !allPhotos.length) ? (
+          {isLoadingPhotos && !allPhotos.length ? (
             <SkeletonGrid />
           ) : (
             <GalleryGrid photos={allPhotos} />
