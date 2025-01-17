@@ -107,11 +107,12 @@ const Gallery = () => {
         )}
 
         <div className="mt-15">
-          {isLoadingPhotos && !allPhotos.length ? (
+        <GalleryGrid photos={allPhotos} />
+          {/* {isLoadingPhotos && !allPhotos.length ? (
             <SkeletonGrid />
           ) : (
-            <GalleryGrid photos={allPhotos} />
-          )}
+            
+          )} */}
         </div>
 
         {allPhotos.length > 0 && (
