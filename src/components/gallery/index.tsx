@@ -1,11 +1,10 @@
-import { useState, useEffect, useCallback } from 'react';
-import usePhotosQuery from '../../queries/usePhotosQuery';
 import type { PhotosWithTotalResults } from 'pexels';
+import { useCallback, useEffect, useState } from 'react';
+import { useSearchParams } from 'react-router-dom';
+import usePhotosQuery from '../../queries/usePhotosQuery';
+import GalleryGrid from './GalleryGrid';
 import LoadMoreTrigger from './LoadMoreTrigger';
 import SearchInput from './SearchInput';
-import GalleryGrid from './GalleryGrid';
-import { useSearchParams } from 'react-router-dom';
-import SkeletonGrid from './SkeletonGrid';
 
 const Gallery = () => {
   const [searchParams, setSearchParams] = useSearchParams();
@@ -21,7 +20,6 @@ const Gallery = () => {
   const {
     data: photosResponse,
     error,
-    isLoading: isLoadingPhotos,
   } = usePhotosQuery({
     query: query,
     per_page: 11,
