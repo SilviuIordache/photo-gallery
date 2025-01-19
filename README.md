@@ -13,3 +13,8 @@
 ### See live demo here
 
 [https://nice-photo-gallery.vercel.app/](https://nice-photo-gallery.vercel.app/)
+
+
+### Lighthouse performance
+
+<img width="1475" alt="image" src="https://github.com/user-attachments/assets/ce9f693c-843b-4bdf-81eb-d222bf213f90" />
