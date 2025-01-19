@@ -5,7 +5,7 @@ import LoadMoreTrigger from './LoadMoreTrigger';
 import SearchInput from './SearchInput';
 import GalleryGrid from './GalleryGrid';
 import { useSearchParams } from 'react-router-dom';
-import SkeletonGrid from './SkeletonGrid';
+// import SkeletonGrid from './SkeletonGrid';
 
 const Gallery = () => {
   const [searchParams, setSearchParams] = useSearchParams();
@@ -17,12 +17,12 @@ const Gallery = () => {
   );
   const [isFetchingMore, setIsFetchingMore] = useState(false);
   const [loadCountdown, setLoadCountdown] = useState<number | null>(3);
-  const [showSkeletonLoader, setShowSkeletonLoader] = useState(true);
+  // const [showSkeletonLoader, setShowSkeletonLoader] = useState(true);
 
   const {
     data: photosResponse,
     error,
-    isLoading: isLoadingPhotos,
+    // isLoading: isLoadingPhotos,
   } = usePhotosQuery({
     query: query,
     per_page: 11,
@@ -88,17 +88,17 @@ const Gallery = () => {
     }
   }, [handleSearch, initialQuery]);
 
-  useEffect(() => {
-    if (!isLoadingPhotos) {
-      const timer = setTimeout(() => {
-        setShowSkeletonLoader(false);
-      }, 1000); // Adjust the delay as needed
+  // useEffect(() => {
+  //   if (!isLoadingPhotos) {
+  //     const timer = setTimeout(() => {
+  //       setShowSkeletonLoader(false);
+  //     }, 1000); // Adjust the delay as needed
 
-      return () => clearTimeout(timer);
-    } else {
-      setShowSkeletonLoader(true);
-    }
-  }, [isLoadingPhotos]);
+  //     return () => clearTimeout(timer);
+  //   } else {
+  //     setShowSkeletonLoader(true);
+  //   }
+  // }, [isLoadingPhotos]);
 
   if (error) return <div>Error: {error.message}</div>;
 
@@ -119,11 +119,11 @@ const Gallery = () => {
         )}
 
         <div className="mt-15">
-          {showSkeletonLoader ? (
+          <GalleryGrid photos={allPhotos} />
+          {/* {showSkeletonLoader ? (
             <SkeletonGrid />
           ) : (
-            <GalleryGrid photos={allPhotos} />
-          )}
+          )} */}
         </div>
 
         {allPhotos.length > 0 && (
