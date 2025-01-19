@@ -1,13 +1,9 @@
-const SkeletonImage = () => {
-  const minHeight = 25;
-  const maxHeight = 30;
+interface SkeletonImageProps {
+  width: number;
+  height: number;
+}
 
-  const height = `${
-    Math.floor(Math.random() * (maxHeight - minHeight + 1)) + minHeight
-  }rem`;
-
-  const width = '18.5rem';
-
+const SkeletonImage = ({ width, height }: SkeletonImageProps) => {
   return (
     <div
       className=" w-full bg-gray-100 rounded-md"
