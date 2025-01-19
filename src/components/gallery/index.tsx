@@ -92,7 +92,7 @@ const Gallery = () => {
     if (!isLoadingPhotos) {
       const timer = setTimeout(() => {
         setShowSkeletonLoader(false);
-      }, 800); // Adjust the delay as needed
+      }, 1000); // Adjust the delay as needed
 
       return () => clearTimeout(timer);
     } else {
