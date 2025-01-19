@@ -105,7 +105,6 @@ const Gallery = () => {
   return (
     <div className="grid grid-cols-1">
       <div className="fixed top-0 left-0 bg-zinc-900 z-10 w-full py-5">
-        {/* <h1 className="text-4xl font-bold mb-10">Photo gallery</h1> */}
 
         <div className="flex justify-center">
           <SearchInput onSearch={handleSearch} />

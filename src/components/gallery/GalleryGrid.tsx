@@ -48,7 +48,10 @@ const GalleryGrid = ({ photos }: GalleryGridProps) => {
   const columnContents = generateColumnsContents(photos);
 
   return (
-    <div className="masonry-grid" style={{ columnCount: columns }}>
+    <div
+      className="grid grid-cols-2 sm:grid-cols-3 gap-4"
+      style={{ columnCount: columns }}
+    >
       {columnContents.map((column, index) => (
         <div key={index}>
           {column.map((photo) => (

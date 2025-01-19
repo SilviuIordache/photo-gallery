@@ -5,7 +5,9 @@ const SkeletonGrid = () => {
     <SkeletonImage key={index} height={450} width={300} />
   ));
 
-  return <div className="masonry-grid">{skeletons}</div>;
+  return (
+    <div className="grid grid-cols-2 sm:grid-cols-3 gap-4">{skeletons}</div>
+  );
 };
 
 export default SkeletonGrid;
