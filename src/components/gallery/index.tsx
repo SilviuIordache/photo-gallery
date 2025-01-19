@@ -17,6 +17,7 @@ const Gallery = () => {
   );
   const [isFetchingMore, setIsFetchingMore] = useState(false);
   const [loadCountdown, setLoadCountdown] = useState<number | null>(3);
+  const [showSkeletonLoader, setShowSkeletonLoader] = useState(true);
 
   const {
     data: photosResponse,
@@ -87,6 +88,18 @@ const Gallery = () => {
     }
   }, [handleSearch, initialQuery]);
 
+  useEffect(() => {
+    if (!isLoadingPhotos) {
+      const timer = setTimeout(() => {
+        setShowSkeletonLoader(false);
+      }, 100); // Adjust the delay as needed
+
+      return () => clearTimeout(timer);
+    } else {
+      setShowSkeletonLoader(true);
+    }
+  }, [isLoadingPhotos]);
+
   if (error) return <div>Error: {error.message}</div>;
 
   return (
@@ -107,7 +120,7 @@ const Gallery = () => {
         )}
 
         <div className="mt-15">
-          {isLoadingPhotos  ? (
+          {showSkeletonLoader ? (
             <SkeletonGrid />
           ) : (
             <GalleryGrid photos={allPhotos} />
