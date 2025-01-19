@@ -107,10 +107,7 @@ const Gallery = () => {
         )}
 
         <div className="mt-15">
-          {isLoadingPhotos &&
-          photosResponse &&
-          'photos' in photosResponse &&
-          !allPhotos.length ? (
+          {isLoadingPhotos  ? (
             <SkeletonGrid />
           ) : (
             <GalleryGrid photos={allPhotos} />
