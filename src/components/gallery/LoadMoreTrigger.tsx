@@ -2,13 +2,13 @@ import React, { useEffect } from 'react';
 import { useInView } from 'react-intersection-observer';
 
 interface LoadMoreTriggerProps {
-  onInView: () => void;
+  loadMoreImages: () => void;
   isFetchingMore: boolean;
   loadCountdown: number | null;
 }
 
 const LoadMoreTrigger: React.FC<LoadMoreTriggerProps> = ({
-  onInView,
+  loadMoreImages,
   isFetchingMore,
   loadCountdown,
 }) => {
@@ -16,9 +16,9 @@ const LoadMoreTrigger: React.FC<LoadMoreTriggerProps> = ({
 
   useEffect(() => {
     if (inView) {
-      onInView();
+      loadMoreImages();
     }
-  }, [inView, onInView]);
+  }, [inView, loadMoreImages]);
 
   return (
     <div ref={ref} className="mt-10">

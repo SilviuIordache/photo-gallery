@@ -102,7 +102,7 @@ const Gallery = () => {
 
         {allPhotos.length > 0 && (
           <LoadMoreTrigger
-            onInView={loadMoreImages}
+            loadMoreImages={loadMoreImages}
             isFetchingMore={isFetchingMore}
             loadCountdown={loadCountdown}
           />
