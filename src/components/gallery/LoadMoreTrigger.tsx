@@ -15,6 +15,7 @@ const LoadMoreTrigger: React.FC<LoadMoreTriggerProps> = ({
 
   useEffect(() => {
     if (inView && !isCountdownRunning) {
+      console.log('start countdown');
       setCountdown(3);
       setIsCountdownRunning(true);
     }
@@ -22,11 +23,13 @@ const LoadMoreTrigger: React.FC<LoadMoreTriggerProps> = ({
 
   useEffect(() => {
     if (countdown === 0) {
+      console.log('countdown is 0');
       loadMoreImages();
+      setIsCountdownRunning(false);
       setCountdown(3);
     }
 
-    if (countdown > 0) {
+    if (countdown > 0 && isCountdownRunning) {
       intervalRef.current = setTimeout(() => {
         setCountdown((prev) => (prev > 0 ? prev - 1 : 0));
       }, 1000);
@@ -35,7 +38,7 @@ const LoadMoreTrigger: React.FC<LoadMoreTriggerProps> = ({
     return () => {
       if (intervalRef.current) clearTimeout(intervalRef.current);
     };
-  }, [countdown, loadMoreImages]);
+  }, [countdown, loadMoreImages, isCountdownRunning]);
 
   return (
     <p ref={ref} className="mt-10 text-3xl">
