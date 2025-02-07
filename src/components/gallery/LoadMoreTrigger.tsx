@@ -1,4 +1,4 @@
-import React, { useCallback, useEffect, useState } from 'react';
+import React, { useEffect, useState, useRef } from 'react';
 import { useInView } from 'react-intersection-observer';
 
 interface LoadMoreTriggerProps {
@@ -9,45 +9,40 @@ const LoadMoreTrigger: React.FC<LoadMoreTriggerProps> = ({
   loadMoreImages,
 }) => {
   const { ref, inView } = useInView();
-
-  const [isLoading, setIsLoading] = useState(false);
+  const intervalRef = useRef<number>();
   const [countdown, setCountdown] = useState(3);
+  const [isCountdownActive, setIsCountdownActive] = useState(false);
 
-  const loadImages = useCallback(() => {
-    if (isLoading) return;
-
-    setIsLoading(true);
-    setCountdown(3);
-    loadMoreImages();
-  }, [isLoading, loadMoreImages]);
-
-  // used to update the loading state
   useEffect(() => {
-    if (!isLoading) return;
+    if (inView) {
+      setCountdown(3);
+      setIsCountdownActive(true);
+    }
+  }, [inView]);
 
-    const interval = setInterval(() => {
+  useEffect(() => {
+    if (!isCountdownActive) return;
+
+    intervalRef.current = setInterval(() => {
       setCountdown((prev) => {
         if (prev <= 1) {
-          clearInterval(interval);
-          setIsLoading(false);
+          clearInterval(intervalRef.current);
+          setIsCountdownActive(false);
+          loadMoreImages();
           return 0;
         }
         return prev - 1;
       });
     }, 1000);
 
-    return () => clearInterval(interval);
-  }, [isLoading]);
-
-  useEffect(() => {
-    if (inView) {
-      loadImages();
-    }
-  }, [inView, loadImages]);
+    return () => {
+      if (intervalRef.current) clearInterval(intervalRef.current);
+    };
+  }, [isCountdownActive, loadMoreImages]);
 
   return (
     <p ref={ref} className="mt-10 text-3xl">
-      {isLoading ? `Loading more in ${countdown}...` : null}
+      {isCountdownActive ? `Loading more in ${countdown}...` : null}
     </p>
   );
 };
