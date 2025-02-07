@@ -1,7 +1,8 @@
 import { Photo } from 'pexels';
-import { useEffect, useState } from 'react';
+import { useEffect, useState, useCallback } from 'react';
 import GalleryImage from './GalleryImage';
 import SkeletonGrid from './SkeletonGrid';
+import usePageSize from '../../hooks/usePageSize';
 
 interface GalleryGridProps {
   isLoadingMore: boolean;
@@ -9,33 +10,18 @@ interface GalleryGridProps {
 }
 
 const GalleryGrid = ({ photos, isLoadingMore }: GalleryGridProps) => {
-  const [columns, setColumns] = useState(3);
+  const [columnContents, setColumnContents] = useState<Photo[][]>([]);
+  const [columnCount, setColumnCount] = useState(3);
 
-  // used to update the number of columns based on the window size
-  useEffect(() => {
-    const updateColumns = () => {
-      if (window.innerWidth < 600) {
-        setColumns(2); // Small devices
-      } else {
-        setColumns(3); // Large devices
-      }
-    };
+  const { pageSize } = usePageSize();
 
-    // Set initial columns
-    updateColumns();
+  const generateColumnsContents = useCallback(() => {
+    const columnHeights = new Array(columnCount).fill(0);
+    const columnContents: Photo[][] = Array.from(
+      { length: columnCount },
+      () => []
+    );
 
-    // Add event listener for window resize
-    window.addEventListener('resize', updateColumns);
-
-    // Cleanup event listener on component unmount
-    return () => window.removeEventListener('resize', updateColumns);
-  }, []);
-
-  const generateColumnsContents = (photos: Photo[]) => {
-    const columnHeights = new Array(columns).fill(0);
-    const columnContents: Photo[][] = Array.from({ length: columns }, () => []);
-
-    // distribute photos to columns based on their height/width ratio
     photos.forEach((photo) => {
       const shortestColumnIndex = columnHeights.indexOf(
         Math.min(...columnHeights)
@@ -45,14 +31,19 @@ const GalleryGrid = ({ photos, isLoadingMore }: GalleryGridProps) => {
     });
 
     return columnContents;
-  };
+  }, [columnCount, photos]);
 
-  const columnContents = generateColumnsContents(photos);
+  useEffect(() => {
+    const newColumnContents = generateColumnsContents();
+    setColumnContents(newColumnContents);
+
+    setColumnCount(pageSize === 'xs' ? 2 : 3);
+  }, [pageSize, generateColumnsContents]);
 
   return (
     <div
-      className="grid grid-cols-2 sm:grid-cols-3 gap-4"
-      style={{ columnCount: columns }}
+      className="grid grid-cols-2 sm:grid-cols-3 gap-6"
+      style={{ columnCount }}
     >
       {columnContents.map((column, index) => (
         <div key={index}>

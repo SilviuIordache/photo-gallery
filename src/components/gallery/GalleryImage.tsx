@@ -22,7 +22,7 @@ const GalleryImage = ({ photo }: GalleryImageProps) => {
   }, [photo.src.medium]);
 
   return (
-    <div onClick={handleClick} className="mb-4">
+    <div onClick={handleClick} className="mb-6">
       {!isLoaded && <SkeletonImage height={450} width={300} />}
       <img
         src={photo.src.medium}
