@@ -11,14 +11,14 @@ const LoadMoreTrigger: React.FC<LoadMoreTriggerProps> = ({
   const { ref, inView } = useInView();
   const intervalRef = useRef<number>();
   const [countdown, setCountdown] = useState<number>(3);
-  const [isCountdownActive, setIsCountdownActive] = useState(false);
+  const [isCountdownRunning, setIsCountdownRunning] = useState(false);
 
   useEffect(() => {
-    if (inView) {
+    if (inView && !isCountdownRunning) {
       setCountdown(3);
-      setIsCountdownActive(true);
+      setIsCountdownRunning(true);
     }
-  }, [inView]);
+  }, [inView, isCountdownRunning]);
 
   useEffect(() => {
     if (countdown === 0) {
@@ -39,7 +39,7 @@ const LoadMoreTrigger: React.FC<LoadMoreTriggerProps> = ({
 
   return (
     <p ref={ref} className="mt-10 text-3xl">
-      {isCountdownActive ? `Loading more in ${countdown}...` : null}
+      {isCountdownRunning ? `Loading more in ${countdown}...` : null}
     </p>
   );
 };
