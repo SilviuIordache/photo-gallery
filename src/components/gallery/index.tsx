@@ -17,12 +17,12 @@ const Gallery = () => {
   );
   const [isFetchingMore, setIsFetchingMore] = useState(false);
   const [loadCountdown, setLoadCountdown] = useState<number | null>(3);
-  const [showSkeletonLoader, setShowSkeletonLoader] = useState(true);
+  const [hasLoadedInitialPhotos, setHasLoadedInitialPhotos] = useState(false);
 
   const {
     data: photosResponse,
     error,
-    isLoading: isLoadingPhotos,
+    isLoading: isFetchingPhotos,
   } = usePhotosQuery({
     query: query,
     per_page: 11,
@@ -47,8 +47,13 @@ const Gallery = () => {
     if (photosResponse && 'photos' in photosResponse) {
       setAllPhotos((prevPhotos) => [...prevPhotos, ...photosResponse.photos]);
       setIsFetchingMore(false);
+
+      // Set hasLoadedInitialPhotos to true after the first load
+      if (page === 1) {
+        setHasLoadedInitialPhotos(true);
+      }
     }
-  }, [photosResponse]);
+  }, [photosResponse, page]);
 
   // used to update the loadCountdown state
   useEffect(() => {
@@ -88,41 +93,25 @@ const Gallery = () => {
     }
   }, [handleSearch, initialQuery]);
 
-  useEffect(() => {
-    if (!isLoadingPhotos) {
-      const timer = setTimeout(() => {
-        setShowSkeletonLoader(false);
-      }, 1000); // Adjust the delay as needed
-
-      return () => clearTimeout(timer);
-    } else {
-      setShowSkeletonLoader(true);
-    }
-  }, [isLoadingPhotos]);
 
   if (error) return <div>Error: {error.message}</div>;
 
   return (
     <div className="grid grid-cols-1">
       <div className="fixed top-0 left-0 bg-zinc-900 z-10 w-full py-5">
-
         <div className="flex justify-center">
           <SearchInput onSearch={handleSearch} />
         </div>
       </div>
 
       <div className="relative min-h-[540px]">
-        {!allPhotos.length && !isFetchingMore && (
-          <div className="absolute inset-0 flex items-center justify-center text-lg text-gray-500">
-            Loading images...
-          </div>
-        )}
+ 
 
         <div className="mt-15">
-          {showSkeletonLoader ? (
+          {!hasLoadedInitialPhotos ? (
             <SkeletonGrid />
           ) : (
-            <GalleryGrid photos={allPhotos} />
+            <GalleryGrid photos={allPhotos} isLoadingMore={isFetchingPhotos} />
           )}
         </div>
 

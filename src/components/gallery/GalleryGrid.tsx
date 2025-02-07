@@ -1,12 +1,14 @@
 import { Photo } from 'pexels';
 import { useEffect, useState } from 'react';
 import GalleryImage from './GalleryImage';
+import SkeletonGrid from './SkeletonGrid';
 
 interface GalleryGridProps {
+  isLoadingMore: boolean;
   photos: Photo[];
 }
 
-const GalleryGrid = ({ photos }: GalleryGridProps) => {
+const GalleryGrid = ({ photos, isLoadingMore }: GalleryGridProps) => {
   const [columns, setColumns] = useState(3);
 
   // used to update the number of columns based on the window size
@@ -59,6 +61,8 @@ const GalleryGrid = ({ photos }: GalleryGridProps) => {
           ))}
         </div>
       ))}
+
+      {isLoadingMore && <SkeletonGrid />}
     </div>
   );
 };
