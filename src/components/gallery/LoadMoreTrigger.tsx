@@ -10,31 +10,34 @@ const LoadMoreTrigger: React.FC<LoadMoreTriggerProps> = ({
 }) => {
   const { ref, inView } = useInView();
 
-  const [loadCountdown, setLoadCountdown] = useState<number | null>(3);
+  const [isLoading, setIsLoading] = useState(false);
+  const [countdown, setCountdown] = useState(3);
 
   const loadImages = useCallback(() => {
-    if (loadCountdown !== null) return;
+    if (isLoading) return;
 
+    setIsLoading(true);
+    setCountdown(3);
     loadMoreImages();
-    setLoadCountdown(3);
-  }, [loadCountdown, loadMoreImages]);
+  }, [isLoading, loadMoreImages]);
 
-  // used to update the loadCountdown state
+  // used to update the loading state
   useEffect(() => {
-    if (loadCountdown === null) return;
+    if (!isLoading) return;
 
     const interval = setInterval(() => {
-      setLoadCountdown((prevCountdown) => {
-        if (prevCountdown === 1) {
+      setCountdown((prev) => {
+        if (prev <= 1) {
           clearInterval(interval);
-          return null;
+          setIsLoading(false);
+          return 0;
         }
-        return prevCountdown! - 1;
+        return prev - 1;
       });
     }, 1000);
 
     return () => clearInterval(interval);
-  }, [loadCountdown]);
+  }, [isLoading]);
 
   useEffect(() => {
     if (inView) {
@@ -44,7 +47,7 @@ const LoadMoreTrigger: React.FC<LoadMoreTriggerProps> = ({
 
   return (
     <div ref={ref} className="mt-10">
-      {`Loading more in ${loadCountdown}...`}
+      {isLoading ? `Loading more in ${countdown}s` : null}
     </div>
   );
 };
