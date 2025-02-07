@@ -14,7 +14,10 @@ const GalleryGrid = ({ photos }: GalleryGridProps) => {
   const { pageSize } = usePageSize();
 
   const generateColumnsContents = useCallback(() => {
+    // array that keeps track of the height of each column
     const columnHeights = new Array(columnCount).fill(0);
+
+    // array of arrays that will contain the photos for each column
     const columnContents: Photo[][] = Array.from(
       { length: columnCount },
       () => []
