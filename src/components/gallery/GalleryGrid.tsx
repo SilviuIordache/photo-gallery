@@ -1,16 +1,14 @@
 import { Photo } from 'pexels';
-import { useEffect, useState, useCallback } from 'react';
+import { useLayoutEffect, useState, useCallback } from 'react';
 import GalleryImage from './GalleryImage';
-import SkeletonGrid from './SkeletonGrid';
 import usePageSize from '../../hooks/usePageSize';
 
 interface GalleryGridProps {
-  isLoadingMore: boolean;
   photos: Photo[];
 }
 
-const GalleryGrid = ({ photos, isLoadingMore }: GalleryGridProps) => {
-  const [columnContents, setColumnContents] = useState<Photo[][]>([]);
+const GalleryGrid = ({ photos }: GalleryGridProps) => {
+  const [columnContents, setColumnContents] = useState<Photo[][]>([[], [], []]);
   const [columnCount, setColumnCount] = useState(3);
 
   const { pageSize } = usePageSize();
@@ -33,10 +31,9 @@ const GalleryGrid = ({ photos, isLoadingMore }: GalleryGridProps) => {
     return columnContents;
   }, [columnCount, photos]);
 
-  useEffect(() => {
+  useLayoutEffect(() => {
     const newColumnContents = generateColumnsContents();
     setColumnContents(newColumnContents);
-
     setColumnCount(pageSize === 'xs' ? 2 : 3);
   }, [pageSize, generateColumnsContents]);
 
@@ -52,8 +49,6 @@ const GalleryGrid = ({ photos, isLoadingMore }: GalleryGridProps) => {
           ))}
         </div>
       ))}
-
-      {isLoadingMore && <SkeletonGrid />}
     </div>
   );
 };

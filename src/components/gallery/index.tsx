@@ -22,7 +22,6 @@ const Gallery = () => {
   const {
     data: photosResponse,
     error,
-    isLoading: isFetchingPhotos,
   } = usePhotosQuery({
     query: query,
     per_page: 11,
@@ -111,7 +110,7 @@ const Gallery = () => {
           {!hasLoadedInitialPhotos ? (
             <SkeletonGrid />
           ) : (
-            <GalleryGrid photos={allPhotos} isLoadingMore={isFetchingPhotos} />
+            <GalleryGrid photos={allPhotos} />
           )}
         </div>
 
