@@ -14,8 +14,7 @@ const Gallery = () => {
   const [allPhotos, setAllPhotos] = useState<PhotosWithTotalResults['photos']>(
     []
   );
-  const [isFetchingMore, setIsFetchingMore] = useState(false);
-  const [loadCountdown, setLoadCountdown] = useState<number | null>(3);
+
   const [hasLoadedInitialPhotos, setHasLoadedInitialPhotos] = useState(false);
 
   const { data: photosResponse, error } = usePhotosQuery({
@@ -24,13 +23,9 @@ const Gallery = () => {
     page: page,
   });
 
-  const loadMoreImages = useCallback(() => {
-    if (loadCountdown !== null) return;
-
-    setIsFetchingMore(true);
+  const loadMoreImages = () => {
     setPage((prevPage) => prevPage + 1);
-    setLoadCountdown(3);
-  }, [loadCountdown]);
+  };
 
   // used to clear the photos when the query changes
   useEffect(() => {
@@ -41,7 +36,6 @@ const Gallery = () => {
   useEffect(() => {
     if (photosResponse && 'photos' in photosResponse) {
       setAllPhotos((prevPhotos) => [...prevPhotos, ...photosResponse.photos]);
-      setIsFetchingMore(false);
 
       // Set hasLoadedInitialPhotos to true after the first load
       if (page === 1) {
@@ -49,23 +43,6 @@ const Gallery = () => {
       }
     }
   }, [photosResponse, page]);
-
-  // used to update the loadCountdown state
-  useEffect(() => {
-    if (loadCountdown === null) return;
-
-    const interval = setInterval(() => {
-      setLoadCountdown((prevCountdown) => {
-        if (prevCountdown === 1) {
-          clearInterval(interval);
-          return null;
-        }
-        return prevCountdown! - 1;
-      });
-    }, 1000);
-
-    return () => clearInterval(interval);
-  }, [loadCountdown]);
 
   const handleSearch = useCallback(
     (query: string) => {
@@ -103,8 +80,6 @@ const Gallery = () => {
         {allPhotos.length > 0 && (
           <LoadMoreTrigger
             loadMoreImages={loadMoreImages}
-            isFetchingMore={isFetchingMore}
-            loadCountdown={loadCountdown}
           />
         )}
       </div>
