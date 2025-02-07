@@ -6,7 +6,7 @@ const SkeletonGrid = () => {
   ));
 
   return (
-    <div className="grid grid-cols-2 sm:grid-cols-3 gap-4">{skeletons}</div>
+    <div className="grid grid-cols-2 sm:grid-cols-3 gap-6">{skeletons}</div>
   );
 };
 

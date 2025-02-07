@@ -46,9 +46,9 @@ const LoadMoreTrigger: React.FC<LoadMoreTriggerProps> = ({
   }, [inView, loadImages]);
 
   return (
-    <div ref={ref} className="mt-10">
-      {isLoading ? `Loading more in ${countdown}s` : null}
-    </div>
+    <p ref={ref} className="mt-10 text-3xl">
+      {isLoading ? `Loading more in ${countdown}...` : null}
+    </p>
   );
 };
 
