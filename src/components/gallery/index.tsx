@@ -9,8 +9,7 @@ import SkeletonGrid from './SkeletonGrid';
 
 const Gallery = () => {
   const [searchParams, setSearchParams] = useSearchParams();
-  const initialQuery = searchParams.get('query') || '';
-  const [query, setQuery] = useState(initialQuery);
+  const [query, setQuery] = useState(searchParams.get('query') || '');
   const [page, setPage] = useState(1);
   const [allPhotos, setAllPhotos] = useState<PhotosWithTotalResults['photos']>(
     []
@@ -19,10 +18,7 @@ const Gallery = () => {
   const [loadCountdown, setLoadCountdown] = useState<number | null>(3);
   const [hasLoadedInitialPhotos, setHasLoadedInitialPhotos] = useState(false);
 
-  const {
-    data: photosResponse,
-    error,
-  } = usePhotosQuery({
+  const { data: photosResponse, error } = usePhotosQuery({
     query: query,
     per_page: 11,
     page: page,
@@ -85,14 +81,6 @@ const Gallery = () => {
     [setSearchParams]
   );
 
-  // used to handle the initial query
-  useEffect(() => {
-    if (initialQuery) {
-      handleSearch(initialQuery);
-    }
-  }, [handleSearch, initialQuery]);
-
-
   if (error) return <div>Error: {error.message}</div>;
 
   return (
@@ -104,8 +92,6 @@ const Gallery = () => {
       </div>
 
       <div className="relative min-h-[540px]">
- 
-
         <div className="mt-15">
           {!hasLoadedInitialPhotos ? (
             <SkeletonGrid />
