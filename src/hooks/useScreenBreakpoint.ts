@@ -1,20 +1,20 @@
 import { useState, useEffect } from 'react';
 
-const usePageSize = () => {
-  const getPageSize = () => {
+const useScreenBreakpoint = () => {
+  const getBreakpoint = () => {
     const width = window.innerWidth;
-    if (width < 576) return 'xs'; 
-    if (width < 768) return 'sm'; 
+    if (width < 576) return 'xs';
+    if (width < 768) return 'sm';
     if (width < 992) return 'md';
-    if (width < 1200) return 'lg'; 
+    if (width < 1200) return 'lg';
     return 'xl';
   };
 
-  const [pageSize, setPageSize] = useState(getPageSize());
+  const [breakpoint, setBreakpoint] = useState(getBreakpoint());
 
   useEffect(() => {
     const handleResize = () => {
-      setPageSize(getPageSize());
+      setBreakpoint(getBreakpoint());
     };
 
     window.addEventListener('resize', handleResize);
@@ -23,7 +23,7 @@ const usePageSize = () => {
     };
   }, []);
 
-  return { pageSize, setPageSize };
+  return { breakpoint };
 };
 
-export default usePageSize;
+export default useScreenBreakpoint;

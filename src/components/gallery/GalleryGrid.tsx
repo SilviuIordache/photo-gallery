@@ -1,7 +1,7 @@
 import { Photo } from 'pexels';
 import { useLayoutEffect, useState, useCallback } from 'react';
 import GalleryImage from './GalleryImage';
-import usePageSize from '../../hooks/usePageSize';
+import useScreenBreakpoint from '../../hooks/useScreenBreakpoint';
 
 interface GalleryGridProps {
   photos: Photo[];
@@ -11,7 +11,7 @@ const GalleryGrid = ({ photos }: GalleryGridProps) => {
   const [columnContents, setColumnContents] = useState<Photo[][]>([[], [], []]);
   const [columnCount, setColumnCount] = useState(3);
 
-  const { pageSize } = usePageSize();
+  const { breakpoint } = useScreenBreakpoint();
 
   const generateColumnsContents = useCallback(() => {
     // array that keeps track of the height of each column
@@ -37,8 +37,8 @@ const GalleryGrid = ({ photos }: GalleryGridProps) => {
   useLayoutEffect(() => {
     const newColumnContents = generateColumnsContents();
     setColumnContents(newColumnContents);
-    setColumnCount(pageSize === 'xs' ? 2 : 3);
-  }, [pageSize, generateColumnsContents]);
+    setColumnCount(breakpoint === 'xs' ? 2 : 3);
+  }, [breakpoint, generateColumnsContents]);
 
   return (
     <div
