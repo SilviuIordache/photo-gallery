@@ -22,12 +22,12 @@ const LoadMoreTrigger: React.FC<LoadMoreTriggerProps> = ({
     countdown: imagesCountdown,
     isCountdownRunning: isImagesCountdownRunning,
     startCountdown: startImagesCountdown,
-  } = useCountdown(3, loadImagesCallback, 'image');
+  } = useCountdown(3, loadImagesCallback);
 
   const {
     isCountdownRunning: isPauseCountdownRunning,
     startCountdown: startPauseCountdown,
-  } = useCountdown(1, () => setShowTrigger(true), 'pause');
+  } = useCountdown(1, () => setShowTrigger(true));
 
   useEffect(() => {
     if (inView && !isImagesCountdownRunning && showTrigger) {
