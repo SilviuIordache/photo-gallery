@@ -10,8 +10,7 @@ interface GalleryGridProps {
 const GalleryGrid = ({ photos }: GalleryGridProps) => {
   const { breakpoint } = useScreenBreakpoint();
   
-  // Determine column count based on breakpoint
-  const columnCount = breakpoint === 'default' ? 2 : 3; // 'default' means before `sm:grid-cols-3`
+  const columnCount = breakpoint === 'xs' ? 2 : 3;
 
   const generateColumnsContents = useCallback(() => {
     console.log('generateColumnsContents');
