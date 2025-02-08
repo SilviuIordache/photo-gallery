@@ -1,38 +1,31 @@
-import { useEffect, useRef, useState } from 'react';
+import { useEffect, useState } from 'react';
 
-export const useCountdown = (
-  initialValue: number,
-  onComplete: () => void,
-  countdownName?: string
-) => {
-  const intervalRef = useRef<number>();
-  const [countdown, setCountdown] = useState<number>(initialValue);
+export const useCountdown = (initialValue: number, onComplete: () => void) => {
+  const [countdown, setCountdown] = useState(initialValue);
   const [isCountdownRunning, setIsCountdownRunning] = useState(false);
 
   const startCountdown = () => {
-    // console.log(`${countdownName} countdown started`);
     setCountdown(initialValue);
     setIsCountdownRunning(true);
   };
 
   useEffect(() => {
-    if (countdown === 0) {
-      // console.log(`${countdownName} countdown is 0`);
-      onComplete();
+    if (!isCountdownRunning || countdown <= 0) return;
+
+    const timeout = setTimeout(() => {
+      setCountdown((prev) => prev - 1);
+    }, 1000);
+
+    return () => clearTimeout(timeout);
+  }, [countdown, isCountdownRunning]); // ✅ Now countdown is included safely
+
+  // Separate effect for when countdown reaches 0
+  useEffect(() => {
+    if (countdown === 0 && isCountdownRunning) {
       setIsCountdownRunning(false);
-      setCountdown(initialValue);
+      onComplete();
     }
-
-    if (countdown > 0 && isCountdownRunning) {
-      intervalRef.current = setTimeout(() => {
-        setCountdown((prev) => (prev > 0 ? prev - 1 : 0));
-      }, 1000);
-    }
-
-    return () => {
-      if (intervalRef.current) clearTimeout(intervalRef.current);
-    };
-  }, [countdown, onComplete, isCountdownRunning, initialValue, countdownName]);
+  }, [countdown, isCountdownRunning, onComplete]);
 
   return { countdown, isCountdownRunning, startCountdown };
 };
