@@ -1,5 +1,6 @@
-import React, { useEffect, useState, useRef } from 'react';
+import React, { useEffect, useState } from 'react';
 import { useInView } from 'react-intersection-observer';
+import { useCountdown } from '../../hooks/useCountdown';
 
 interface LoadMoreTriggerProps {
   loadMoreImages: () => void;
@@ -9,40 +10,43 @@ const LoadMoreTrigger: React.FC<LoadMoreTriggerProps> = ({
   loadMoreImages,
 }) => {
   const { ref, inView } = useInView();
-  const intervalRef = useRef<number>();
-  const [countdown, setCountdown] = useState<number>(3);
-  const [isCountdownRunning, setIsCountdownRunning] = useState(false);
+  const [showTrigger, setShowTrigger] = useState(true);
+
+  const loadImagesCallback = () => {
+    loadMoreImages();
+    setShowTrigger(false);
+    startPauseCountdown();
+  };
+
+  const {
+    countdown: imagesCountdown,
+    isCountdownRunning: isImagesCountdownRunning,
+    startCountdown: startImagesCountdown,
+  } = useCountdown(3, loadImagesCallback, 'image');
+
+  const {
+    isCountdownRunning: isPauseCountdownRunning,
+    startCountdown: startPauseCountdown,
+  } = useCountdown(1, () => setShowTrigger(true), 'pause');
 
   useEffect(() => {
-    if (inView && !isCountdownRunning) {
-      console.log('start countdown');
-      setCountdown(3);
-      setIsCountdownRunning(true);
+    if (inView && !isImagesCountdownRunning && showTrigger) {
+      startImagesCountdown();
     }
-  }, [inView, isCountdownRunning]);
+  }, [inView, isImagesCountdownRunning, startImagesCountdown, showTrigger]);
 
   useEffect(() => {
-    if (countdown === 0) {
-      console.log('countdown is 0');
-      loadMoreImages();
-      setIsCountdownRunning(false);
-      setCountdown(3);
+    if (!showTrigger && !isPauseCountdownRunning) {
+      startPauseCountdown();
     }
+  }, [showTrigger, isPauseCountdownRunning, startPauseCountdown]);
 
-    if (countdown > 0 && isCountdownRunning) {
-      intervalRef.current = setTimeout(() => {
-        setCountdown((prev) => (prev > 0 ? prev - 1 : 0));
-      }, 1000);
-    }
-
-    return () => {
-      if (intervalRef.current) clearTimeout(intervalRef.current);
-    };
-  }, [countdown, loadMoreImages, isCountdownRunning]);
-
+  if (!showTrigger) return null;
   return (
     <p ref={ref} className="mt-10 text-3xl">
-      {isCountdownRunning ? `Loading more in ${countdown}...` : null}
+      {isImagesCountdownRunning
+        ? `Loading more in ${imagesCountdown}...`
+        : null}
     </p>
   );
 };
