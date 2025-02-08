@@ -3,10 +3,10 @@ import { useState, useEffect } from 'react';
 const useScreenBreakpoint = () => {
   const getBreakpoint = () => {
     const width = window.innerWidth;
-    if (width < 576) return 'xs';
-    if (width < 768) return 'sm';
-    if (width < 992) return 'md';
-    if (width < 1200) return 'lg';
+    if (width < 640) return 'default';
+    if (width < 1024) return 'sm';
+    if (width < 1280) return 'md';
+    if (width < 1536) return 'lg';
     return 'xl';
   };
 

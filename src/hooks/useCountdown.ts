@@ -10,14 +10,14 @@ export const useCountdown = (
   const [isCountdownRunning, setIsCountdownRunning] = useState(false);
 
   const startCountdown = () => {
-    console.log(`${countdownName} countdown started`);
+    // console.log(`${countdownName} countdown started`);
     setCountdown(initialValue);
     setIsCountdownRunning(true);
   };
 
   useEffect(() => {
     if (countdown === 0) {
-      console.log(`${countdownName} countdown is 0`);
+      // console.log(`${countdownName} countdown is 0`);
       onComplete();
       setIsCountdownRunning(false);
       setCountdown(initialValue);

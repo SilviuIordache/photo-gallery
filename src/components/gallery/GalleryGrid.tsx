@@ -8,25 +8,18 @@ interface GalleryGridProps {
 }
 
 const GalleryGrid = ({ photos }: GalleryGridProps) => {
-  const [columnContents, setColumnContents] = useState<Photo[][]>([[], [], []]);
-  const [columnCount, setColumnCount] = useState(3);
-
   const { breakpoint } = useScreenBreakpoint();
+  
+  // Determine column count based on breakpoint
+  const columnCount = breakpoint === 'default' ? 2 : 3; // 'default' means before `sm:grid-cols-3`
 
   const generateColumnsContents = useCallback(() => {
-    // array that keeps track of the height of each column
+    console.log('generateColumnsContents');
     const columnHeights = new Array(columnCount).fill(0);
-
-    // array of arrays that will contain the photos for each column
-    const columnContents: Photo[][] = Array.from(
-      { length: columnCount },
-      () => []
-    );
+    const columnContents: Photo[][] = Array.from({ length: columnCount }, () => []);
 
     photos.forEach((photo) => {
-      const shortestColumnIndex = columnHeights.indexOf(
-        Math.min(...columnHeights)
-      );
+      const shortestColumnIndex = columnHeights.indexOf(Math.min(...columnHeights));
       columnContents[shortestColumnIndex].push(photo);
       columnHeights[shortestColumnIndex] += photo.height / photo.width;
     });
@@ -34,17 +27,14 @@ const GalleryGrid = ({ photos }: GalleryGridProps) => {
     return columnContents;
   }, [columnCount, photos]);
 
+  const [columnContents, setColumnContents] = useState<Photo[][]>(generateColumnsContents);
+
   useEffect(() => {
-    const newColumnContents = generateColumnsContents();
-    setColumnContents(newColumnContents);
-    setColumnCount(breakpoint === 'xs' ? 2 : 3);
+    setColumnContents(generateColumnsContents());
   }, [breakpoint, generateColumnsContents]);
 
   return (
-    <div
-      className="grid grid-cols-2 sm:grid-cols-3 gap-6"
-      style={{ columnCount }}
-    >
+    <div className="grid grid-cols-2 sm:grid-cols-3 gap-6">
       {columnContents.map((column, index) => (
         <div key={index}>
           {column.map((photo) => (
