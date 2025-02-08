@@ -1,5 +1,5 @@
 import { Photo } from 'pexels';
-import { useLayoutEffect, useState, useCallback } from 'react';
+import { useState, useCallback, useEffect } from 'react';
 import GalleryImage from './GalleryImage';
 import useScreenBreakpoint from '../../hooks/useScreenBreakpoint';
 
@@ -34,7 +34,7 @@ const GalleryGrid = ({ photos }: GalleryGridProps) => {
     return columnContents;
   }, [columnCount, photos]);
 
-  useLayoutEffect(() => {
+  useEffect(() => {
     const newColumnContents = generateColumnsContents();
     setColumnContents(newColumnContents);
     setColumnCount(breakpoint === 'xs' ? 2 : 3);
