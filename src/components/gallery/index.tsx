@@ -30,6 +30,7 @@ const Gallery = () => {
   // used to clear the photos when the query changes
   useEffect(() => {
     setAllPhotos([]);
+    setHasLoadedInitialPhotos(false);
   }, [query]);
 
   // used to update the photos after loading more
