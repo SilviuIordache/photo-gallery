@@ -13,7 +13,6 @@ const GalleryGrid = ({ photos }: GalleryGridProps) => {
   const columnCount = breakpoint === 'xs' ? 2 : 3;
 
   const generateColumnsContents = useCallback(() => {
-    console.log('generateColumnsContents');
     const columnHeights = new Array(columnCount).fill(0);
     const columnContents: Photo[][] = Array.from({ length: columnCount }, () => []);
 
