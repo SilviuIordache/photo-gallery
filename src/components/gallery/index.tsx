@@ -72,7 +72,7 @@ const Gallery = () => {
     <div className="grid grid-cols-1">
       <div className="fixed top-0 left-0 bg-zinc-900 z-10 w-full py-5">
         <div className="flex justify-center">
-          <SearchInput onSearch={handleSearch} />
+          <SearchInput onSearch={handleSearch} initialQuery={query} />
         </div>
       </div>
 

@@ -1,11 +1,16 @@
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 
 interface SearchInputProps {
   onSearch: (query: string) => void;
+  initialQuery?: string;
 }
 
-const SearchInput = ({ onSearch }: SearchInputProps) => {
-  const [inputValue, setInputValue] = useState('');
+const SearchInput = ({ onSearch, initialQuery }: SearchInputProps) => {
+  const [inputValue, setInputValue] = useState(initialQuery || '');
+
+  useEffect(() => {
+    setInputValue(initialQuery || '');
+  }, [initialQuery]);
 
   const handleChange = (event: React.ChangeEvent<HTMLInputElement>) => {
     setInputValue(event.target.value);
@@ -14,7 +19,6 @@ const SearchInput = ({ onSearch }: SearchInputProps) => {
   const handleSubmit = (event: React.FormEvent<HTMLFormElement>) => {
     event.preventDefault();
     onSearch(inputValue);
-    setInputValue('');
   };
 
   return (
