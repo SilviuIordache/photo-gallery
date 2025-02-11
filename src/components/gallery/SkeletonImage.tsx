@@ -1,13 +1,11 @@
-interface SkeletonImageProps {
-  width: number;
-  height: number;
-}
-
-const SkeletonImage = ({ width, height }: SkeletonImageProps) => {
+const SkeletonImage = () => {
   return (
     <div
-      className=" w-full bg-gray-100 rounded-md"
-      style={{ height, width }}
+      className="bg-gray-100 rounded-md"
+      style={{
+        height: 450,
+        width: '100%',
+      }}
     ></div>
   );
 };

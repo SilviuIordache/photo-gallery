@@ -22,15 +22,14 @@ const GalleryImage = ({ photo }: GalleryImageProps) => {
   }, [photo.src.medium]);
 
   return (
-    <div onClick={handleClick} className="mb-6">
-      {!isLoaded && <SkeletonImage height={450} width={300} />}
+    <div onClick={handleClick} className="mb-6 w-full">
+      {!isLoaded && <SkeletonImage />}
       <img
         src={photo.src.medium}
         alt={photo.alt || ''}
         className={`w-full h-auto rounded-lg hover:opacity-80 hover:cursor-pointer transform transition-transform duration-200 hover:scale-105 ${
           isLoaded ? '' : 'hidden'
         }`}
-        style={{ width: '300px', height: 'fit-content', objectFit: 'cover' }}
         onLoad={() => setIsLoaded(true)}
       />
     </div>
