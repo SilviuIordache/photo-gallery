@@ -27,6 +27,13 @@ const Gallery = () => {
     setPage((prevPage) => prevPage + 1);
   };
 
+  // used to update query state when user performs navigation from browser
+  useEffect(() => {
+    const newQuery = searchParams.get('query') || '';
+    setQuery(newQuery);
+    setPage(1);
+  }, [searchParams]);
+
   // used to clear the photos when the query changes
   useEffect(() => {
     setAllPhotos([]);
@@ -79,9 +86,7 @@ const Gallery = () => {
         </div>
 
         {allPhotos.length > 0 && (
-          <LoadMoreTrigger
-            loadMoreImages={loadMoreImages}
-          />
+          <LoadMoreTrigger loadMoreImages={loadMoreImages} />
         )}
       </div>
     </div>
