@@ -24,10 +24,10 @@ const GalleryImage = ({ photo }: GalleryImageProps) => {
   return (
     <div onClick={handleClick} className="mb-6 w-full">
       {!isLoaded ? (
-        <SkeletonImage height={photo.height} width={photo.width} />
+        <SkeletonImage />
       ) : (
         <img
-          src={photo.src.large}
+          src={photo.src.medium}
           alt={photo.alt || ''}
           className={`w-full h-auto rounded-lg hover:opacity-80 hover:cursor-pointer transform transition-transform duration-200 hover:scale-105 ${
             isLoaded ? '' : 'hidden'

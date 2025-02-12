@@ -2,7 +2,7 @@ import SkeletonImage from './SkeletonImage';
 
 const SkeletonGrid = () => {
   const skeletons = Array.from({ length: 11 }, (_, index) => (
-    <SkeletonImage key={index} height={450} />
+    <SkeletonImage key={`skeleton-${index}`} />
   ));
 
   return (
