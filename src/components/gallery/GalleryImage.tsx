@@ -24,7 +24,7 @@ const GalleryImage = ({ photo }: GalleryImageProps) => {
   return (
     <div onClick={handleClick} className="mb-6 w-full">
       {!isLoaded ? (
-        <SkeletonImage />
+        <SkeletonImage height={photo.height} width={photo.width}/>
       ) : (
         <img
           src={photo.src.medium}

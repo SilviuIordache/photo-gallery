@@ -110,9 +110,11 @@ const Gallery = () => {
           )}
         </div>
 
-        {allPhotos.length > 0 && (
-          <LoadMoreTrigger loadMoreImages={loadMoreImages} />
-        )}
+        <div style={{ height: '300px' }}>
+          {allPhotos.length > 0 && (
+            <LoadMoreTrigger loadMoreImages={loadMoreImages} />
+          )}
+        </div>
       </div>
     </div>
   );
