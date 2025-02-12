@@ -1,6 +1,10 @@
 import { useState, useEffect, useCallback } from 'react';
 import usePhotosQuery from '../../queries/usePhotosQuery';
-import type { PhotosWithTotalResults } from 'pexels';
+import type {
+  Photo,
+  Photos,
+  ErrorResponse,
+} from 'pexels';
 import LoadMoreTrigger from './LoadMoreTrigger';
 import SearchInput from './SearchInput';
 import GalleryGrid from './GalleryGrid';
@@ -11,9 +15,7 @@ const Gallery = () => {
   const [searchParams, setSearchParams] = useSearchParams();
   const [query, setQuery] = useState(searchParams.get('query') || '');
   const [page, setPage] = useState(1);
-  const [allPhotos, setAllPhotos] = useState<PhotosWithTotalResults['photos']>(
-    []
-  );
+  const [allPhotos, setAllPhotos] = useState<Photo[]>([]);
 
   const [hasLoadedInitialPhotos, setHasLoadedInitialPhotos] = useState(false);
 
@@ -40,21 +42,34 @@ const Gallery = () => {
     setHasLoadedInitialPhotos(false);
   }, [query]);
 
-  // used to update the photos after loading more
-  useEffect(() => {
-    if (photosResponse && 'photos' in photosResponse) {
-      setAllPhotos((prevPhotos) => {
-        const newPhotos = [...prevPhotos, ...photosResponse.photos];
-        return Array.from(
-          new Map(newPhotos.map((photo) => [photo.id, photo])).values()
-        );
-      });
+  const deduplicatePhotos = useCallback((existingPhotos: Photo[], newPhotos: Photo[]) => {
+    return Array.from(
+      new Map(
+        [...existingPhotos, ...newPhotos].map((photo) => [photo.id, photo])
+      ).values()
+      );
+    },
+    []
+  );
 
-      if (page === 1) {
-        setHasLoadedInitialPhotos(true);
+  const updatePhotos = useCallback(
+    (photosResponse: Photos | ErrorResponse | undefined, page: number) => {
+      if (photosResponse && 'photos' in photosResponse) {
+        setAllPhotos((prevPhotos) =>
+          deduplicatePhotos(prevPhotos, photosResponse.photos)
+        );
+
+        if (page === 1) {
+          setHasLoadedInitialPhotos(true);
+        }
       }
-    }
-  }, [photosResponse, page]);
+    },
+    [deduplicatePhotos]
+  );
+
+  useEffect(() => {
+    updatePhotos(photosResponse, page);
+  }, [photosResponse, page, updatePhotos]);
 
   const handleSearch = useCallback(
     (query: string) => {
