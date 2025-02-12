@@ -9,6 +9,8 @@ interface LoadMoreTriggerProps {
 const LoadMoreTrigger: React.FC<LoadMoreTriggerProps> = ({
   loadMoreImages,
 }) => {
+  const COUNTDOWN_TIME = 2;
+  const COOLDOWN_TIME = 1;
   const { ref, inView } = useInView();
   const [showTrigger, setShowTrigger] = useState(true);
 
@@ -22,12 +24,12 @@ const LoadMoreTrigger: React.FC<LoadMoreTriggerProps> = ({
     countdown: imagesCountdown,
     isCountdownRunning: isImagesCountdownRunning,
     startCountdown: startImagesCountdown,
-  } = useCountdown(3, loadImagesCallback);
+  } = useCountdown(COUNTDOWN_TIME, loadImagesCallback);
 
   const {
     isCountdownRunning: isPauseCountdownRunning,
     startCountdown: startPauseCountdown,
-  } = useCountdown(1, () => setShowTrigger(true));
+  } = useCountdown(COOLDOWN_TIME, () => setShowTrigger(true));
 
   useEffect(() => {
     if (inView && !isImagesCountdownRunning && showTrigger) {
