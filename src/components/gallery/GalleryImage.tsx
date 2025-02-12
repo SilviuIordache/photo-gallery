@@ -23,15 +23,17 @@ const GalleryImage = ({ photo }: GalleryImageProps) => {
 
   return (
     <div onClick={handleClick} className="mb-6 w-full">
-      {!isLoaded && <SkeletonImage />}
-      <img
-        src={photo.src.large}
-        alt={photo.alt || ''}
-        className={`w-full h-auto rounded-lg hover:opacity-80 hover:cursor-pointer transform transition-transform duration-200 hover:scale-105 ${
-          isLoaded ? '' : 'hidden'
-        }`}
-        onLoad={() => setIsLoaded(true)}
-      />
+      {!isLoaded ? (
+        <SkeletonImage height={photo.height} width={photo.width} />
+      ) : (
+        <img
+          src={photo.src.large}
+          alt={photo.alt || ''}
+          className={`w-full h-auto rounded-lg hover:opacity-80 hover:cursor-pointer transform transition-transform duration-200 hover:scale-105 ${
+            isLoaded ? '' : 'hidden'
+          }`}
+        />
+      )}
     </div>
   );
 };
