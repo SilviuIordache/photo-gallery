@@ -43,9 +43,13 @@ const Gallery = () => {
   // used to update the photos after loading more
   useEffect(() => {
     if (photosResponse && 'photos' in photosResponse) {
-      setAllPhotos((prevPhotos) => [...prevPhotos, ...photosResponse.photos]);
+      setAllPhotos((prevPhotos) => {
+        const newPhotos = [...prevPhotos, ...photosResponse.photos];
+        return Array.from(
+          new Map(newPhotos.map((photo) => [photo.id, photo])).values()
+        );
+      });
 
-      // Set hasLoadedInitialPhotos to true after the first load
       if (page === 1) {
         setHasLoadedInitialPhotos(true);
       }
