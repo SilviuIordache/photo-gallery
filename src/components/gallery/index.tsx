@@ -1,10 +1,6 @@
 import { useState, useEffect, useCallback } from 'react';
 import usePhotosQuery from '../../queries/usePhotosQuery';
-import type {
-  Photo,
-  Photos,
-  ErrorResponse,
-} from 'pexels';
+import type { Photo, Photos, ErrorResponse } from 'pexels';
 import LoadMoreTrigger from './LoadMoreTrigger';
 import SearchInput from './SearchInput';
 import GalleryGrid from './GalleryGrid';
@@ -42,12 +38,22 @@ const Gallery = () => {
     setHasLoadedInitialPhotos(false);
   }, [query]);
 
-  const deduplicatePhotos = useCallback((existingPhotos: Photo[], newPhotos: Photo[]) => {
-    return Array.from(
-      new Map(
-        [...existingPhotos, ...newPhotos].map((photo) => [photo.id, photo])
-      ).values()
+  const deduplicatePhotos = useCallback(
+    (existingPhotos: Photo[], newPhotos: Photo[]) => {
+      // Combine existingPhotos and newPhotos into a single array
+      const combinedPhotos = [...existingPhotos, ...newPhotos];
+
+      // Create a Map from the combined array
+      // Each photo is mapped by its id, ensuring uniqueness
+      const photoMap = new Map(
+        combinedPhotos.map((photo) => [photo.id, photo])
       );
+
+      // Extract the values from the Map, which are the unique photos
+      const uniquePhotos = Array.from(photoMap.values());
+
+      // Return the array of unique photos
+      return uniquePhotos;
     },
     []
   );
