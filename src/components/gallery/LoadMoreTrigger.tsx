@@ -18,14 +18,6 @@ const LoadMoreTrigger: React.FC<LoadMoreTriggerProps> = ({
     loadMoreImages();
     setShowTrigger(false);
     startPauseCountdown();
-
-    console.log('loadImagesCallback called');
-  };
-
-  const cooldownCallback = () => {
-    setShowTrigger(true);
-
-    console.log('cooldownCallback called');
   };
 
   const {
@@ -34,10 +26,10 @@ const LoadMoreTrigger: React.FC<LoadMoreTriggerProps> = ({
     startCountdown: startImagesCountdown,
   } = useCountdown(COUNTDOWN_TIME, loadImagesCallback);
 
-  const { startCountdown: startPauseCountdown } = useCountdown(
-    COOLDOWN_TIME,
-    cooldownCallback
-  );
+  const {
+    isCountdownRunning: isPauseCountdownRunning,
+    startCountdown: startPauseCountdown,
+  } = useCountdown(COOLDOWN_TIME, () => setShowTrigger(true));
 
   useEffect(() => {
     if (inView && !isImagesCountdownRunning && showTrigger) {
@@ -45,11 +37,11 @@ const LoadMoreTrigger: React.FC<LoadMoreTriggerProps> = ({
     }
   }, [inView, isImagesCountdownRunning, startImagesCountdown, showTrigger]);
 
-  // useEffect(() => {
-  //   if (!showTrigger && !isPauseCountdownRunning) {
-  //     startPauseCountdown();
-  //   }
-  // }, [showTrigger, isPauseCountdownRunning, startPauseCountdown]);
+  useEffect(() => {
+    if (!showTrigger && !isPauseCountdownRunning) {
+      startPauseCountdown();
+    }
+  }, [showTrigger, isPauseCountdownRunning, startPauseCountdown]);
 
   if (!showTrigger) return null;
   return (
