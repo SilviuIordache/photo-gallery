@@ -6,14 +6,14 @@ interface Props {
 }
 
 const SkeletonImage = ({ height, width }: Props) => {
-  const divRef = useRef<HTMLDivElement>(null);
+  const skeletonRef = useRef<HTMLDivElement>(null);
   const [renderedHeight, setRenderedHeight] = useState(450);
 
   useEffect(() => {
     const updateHeight = () => {
-      if (!divRef.current) return; // Ensure the ref is available
+      if (!skeletonRef.current) return; // Ensure the ref is available
 
-      const renderedWidth = divRef.current.offsetWidth;
+      const renderedWidth = skeletonRef.current.offsetWidth;
 
       if (renderedWidth > 0 && width) {
         const heightValue = height * (renderedWidth / width);
@@ -27,8 +27,8 @@ const SkeletonImage = ({ height, width }: Props) => {
     // TODO: investigate if this is needed
     // Observe width changes
     const resizeObserver = new ResizeObserver(updateHeight);
-    if (divRef.current) {
-      resizeObserver.observe(divRef.current);
+    if (skeletonRef.current) {
+      resizeObserver.observe(skeletonRef.current);
     }
 
     return () => resizeObserver.disconnect();
@@ -36,7 +36,7 @@ const SkeletonImage = ({ height, width }: Props) => {
 
   return (
     <div
-      ref={divRef}
+      ref={skeletonRef}
       className="bg-gray-400 rounded-md animate-pulse skeleton-animation"
       style={{
         height: `${renderedHeight}px`,
