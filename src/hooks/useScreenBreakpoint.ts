@@ -10,7 +10,7 @@ const useScreenBreakpoint = () => {
     return 'xl';
   };
 
-  const [breakpoint, setBreakpoint] = useState(getBreakpoint());
+  const [breakpoint, setBreakpoint] = useState(getBreakpoint);
 
   useEffect(() => {
     const handleResize = () => {
@@ -25,7 +25,7 @@ const useScreenBreakpoint = () => {
     };
   }, []);
 
-  return { breakpoint };
+  return breakpoint;
 };
 
 export default useScreenBreakpoint;
