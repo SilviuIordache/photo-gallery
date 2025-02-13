@@ -1,6 +1,6 @@
 import { useEffect, useState } from 'react';
 
-export type ViewportBreakpoint = 'sm' | 'md' | 'lg' | 'xl';
+export type ViewportBreakpoint = 'xs' | 'sm' | 'md' | 'lg' | 'xl';
 
 const useViewportBreakpoint = () => {
   const [viewportBreakpoint, setViewportBreakpoint] =
@@ -8,16 +8,20 @@ const useViewportBreakpoint = () => {
 
   useEffect(() => {
     const mqls = [
-      { size: 'sm', mql: window.matchMedia('(max-width: 767px)') },
+      { size: 'xs', mql: window.matchMedia('(max-width: 639px)') },
+      {
+        size: 'sm',
+        mql: window.matchMedia('(min-width: 640px) and (max-width: 1023px)'),
+      },
       {
         size: 'md',
-        mql: window.matchMedia('(min-width: 768px) and (max-width: 1023px)'),
+        mql: window.matchMedia('(min-width: 1024px) and (max-width: 1279px)'),
       },
       {
         size: 'lg',
-        mql: window.matchMedia('(min-width: 1024px) and (max-width: 1199px)'),
+        mql: window.matchMedia('(min-width: 1280px) and (max-width: 1535px)'),
       },
-      { size: 'xl', mql: window.matchMedia('(min-width: 1200px)') },
+      { size: 'xl', mql: window.matchMedia('(min-width: 1536px)') },
     ];
 
     const checkMatch = () => {
@@ -30,7 +34,9 @@ const useViewportBreakpoint = () => {
     };
 
     mqls.forEach(({ mql }) => mql.addEventListener('change', checkMatch));
-    checkMatch(); // Initial check
+    
+    // Initial check
+    checkMatch(); 
 
     return () => {
       mqls.forEach(({ mql }) => mql.removeEventListener('change', checkMatch));

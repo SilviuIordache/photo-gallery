@@ -1,23 +1,30 @@
 import { Photo } from 'pexels';
 import { useState, useCallback, useEffect } from 'react';
 import GalleryImage from './GalleryImage';
-import useScreenBreakpoint from '../../hooks/useScreenBreakpoint';
+import useViewportBreakpoint from '../../hooks/useViewportBreakpoint';
 
 interface GalleryGridProps {
   photos: Photo[];
 }
 
 const GalleryGrid = ({ photos }: GalleryGridProps) => {
-  const { breakpoint } = useScreenBreakpoint();
-  
-  const columnCount = breakpoint === 'xs' ? 2 : 3;
+  // const { breakpoint } = useScreenBreakpoint();
+
+  const viewportBreakpoint = useViewportBreakpoint();
+
+  const columnCount = viewportBreakpoint === 'xs' ? 2 : 3;
 
   const generateColumnsContents = useCallback(() => {
     const columnHeights = new Array(columnCount).fill(0);
-    const columnContents: Photo[][] = Array.from({ length: columnCount }, () => []);
+    const columnContents: Photo[][] = Array.from(
+      { length: columnCount },
+      () => []
+    );
 
     photos.forEach((photo) => {
-      const shortestColumnIndex = columnHeights.indexOf(Math.min(...columnHeights));
+      const shortestColumnIndex = columnHeights.indexOf(
+        Math.min(...columnHeights)
+      );
       columnContents[shortestColumnIndex].push(photo);
       columnHeights[shortestColumnIndex] += photo.height / photo.width;
     });
@@ -25,11 +32,13 @@ const GalleryGrid = ({ photos }: GalleryGridProps) => {
     return columnContents;
   }, [columnCount, photos]);
 
-  const [columnContents, setColumnContents] = useState<Photo[][]>(generateColumnsContents);
+  const [columnContents, setColumnContents] = useState<Photo[][]>(
+    generateColumnsContents
+  );
 
   useEffect(() => {
     setColumnContents(generateColumnsContents());
-  }, [breakpoint, generateColumnsContents]);
+  }, [viewportBreakpoint, generateColumnsContents]);
 
   return (
     <div className="grid grid-cols-2 sm:grid-cols-3 gap-6">
