@@ -1,5 +1,5 @@
 import { Photo } from 'pexels';
-import { useCallback, useEffect, useState } from 'react';
+import { useMemo } from 'react';
 import useViewportBreakpoint from '../../hooks/useViewportBreakpoint';
 import GalleryImage from './GalleryImage';
 
@@ -8,12 +8,10 @@ interface GalleryGridProps {
 }
 
 const GalleryGrid = ({ photos }: GalleryGridProps) => {
-  // const breakpoint = useScreenBreakpoint();
   const breakpoint = useViewportBreakpoint();
-
   const columnCount = breakpoint === 'xs' ? 2 : 3;
 
-  const generateColumnsContents = useCallback(() => {
+  const columnContents = useMemo(() => {
     const columnHeights = new Array(columnCount).fill(0);
     const columnContents: Photo[][] = Array.from(
       { length: columnCount },
@@ -30,14 +28,6 @@ const GalleryGrid = ({ photos }: GalleryGridProps) => {
 
     return columnContents;
   }, [columnCount, photos]);
-
-  const [columnContents, setColumnContents] = useState<Photo[][]>(
-    generateColumnsContents
-  );
-
-  useEffect(() => {
-    setColumnContents(generateColumnsContents());
-  }, [breakpoint, generateColumnsContents]);
 
   return (
     <div className="grid grid-cols-2 sm:grid-cols-3 gap-6">
