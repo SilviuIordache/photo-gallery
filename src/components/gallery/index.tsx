@@ -38,31 +38,22 @@ const Gallery = () => {
     setHasLoadedInitialPhotos(false);
   }, [query]);
 
-  const deduplicatePhotos = useCallback(
-    (existingPhotos: Photo[], newPhotos: Photo[]) => {
-      // Combine existingPhotos and newPhotos into a single array
-      const combinedPhotos = [...existingPhotos, ...newPhotos];
+  const deduplicatePhotos = useCallback((photos: Photo[]) => {
+    // Each photo is mapped by its id, ensuring uniqueness
+    const photoMap = new Map(photos.map((photo) => [photo.id, photo]));
 
-      // Create a Map from the combined array
-      // Each photo is mapped by its id, ensuring uniqueness
-      const photoMap = new Map(
-        combinedPhotos.map((photo) => [photo.id, photo])
-      );
+    // Extract the values from the Map, which are the unique photos
+    const uniquePhotos = Array.from(photoMap.values());
 
-      // Extract the values from the Map, which are the unique photos
-      const uniquePhotos = Array.from(photoMap.values());
-
-      // Return the array of unique photos
-      return uniquePhotos;
-    },
-    []
-  );
+    // Return the array of unique photos
+    return uniquePhotos;
+  }, []);
 
   const updatePhotos = useCallback(
     (photosResponse: Photos | ErrorResponse | undefined, page: number) => {
       if (photosResponse && 'photos' in photosResponse) {
         setAllPhotos((prevPhotos) =>
-          deduplicatePhotos(prevPhotos, photosResponse.photos)
+          deduplicatePhotos([...prevPhotos, ...photosResponse.photos])
         );
 
         if (page === 1) {
